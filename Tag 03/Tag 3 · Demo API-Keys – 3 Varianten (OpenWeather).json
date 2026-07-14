@@ -1,0 +1,358 @@
+{
+  "name": "Tag 3 · Demo API-Keys: 3 Varianten (OpenWeather)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "e1bde034-ed35-46da-93da-00129a2905ed",
+      "name": "Manueller Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        592
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.openweathermap.org/data/2.5/weather?q=Darmstadt",
+        "options": {}
+      },
+      "id": "b68cac58-4198-440c-9eea-ec15c0180631",
+      "name": "Ohne API Key (schlägt fehl)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -112,
+        336
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "https://api.openweathermap.org/data/2.5/weather?q=Darmstadt&units=metric",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "appid",
+              "value": "DEIN_OPENWEATHER_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "50dde4a3-0a9a-404d-a897-a04f3749255c",
+      "name": "Key als URL-Parameter",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -112,
+        592
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.openweathermap.org/data/2.5/weather?q=Darmstadt&units=metric",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "options": {}
+      },
+      "id": "2f145067-a5fc-4ca2-a294-2c40448e24b4",
+      "name": "Key über n8n Credentials (Best Practice)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -112,
+        864
+      ],
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "30U7je6WiQjicxnR",
+          "name": "OpenWeather Demo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "variante",
+              "value": "Ohne API Key",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "statusCode",
+              "value": "={{ $json.error?.httpCode || $json.statusCode || 401 }}",
+              "type": "string"
+            },
+            {
+              "id": "a3",
+              "name": "erklaerung",
+              "value": "Kein Key = 401",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bb06dbe5-d930-448f-8d13-d015ae1421e9",
+      "name": "Ergebnis: Ohne Key",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b1",
+              "name": "variante",
+              "value": "Key in URL",
+              "type": "string"
+            },
+            {
+              "id": "b2",
+              "name": "statusCode",
+              "value": "=200",
+              "type": "string"
+            },
+            {
+              "id": "b3",
+              "name": "erklaerung",
+              "value": "Key in URL = funktioniert, aber unsicher in Logs",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "975c4383-a27b-4c46-a0d3-ad763bab0fa2",
+      "name": "Ergebnis: Key in URL",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        592
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c1",
+              "name": "variante",
+              "value": "Key über Credentials",
+              "type": "string"
+            },
+            {
+              "id": "c2",
+              "name": "statusCode",
+              "value": "=200",
+              "type": "string"
+            },
+            {
+              "id": "c3",
+              "name": "erklaerung",
+              "value": "Credentials = Best Practice",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "194c6c5f-1238-4b72-b155-5c5154b38fda",
+      "name": "Ergebnis: Credentials",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        864
+      ]
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "id": "f703a25c-c064-4879-b6ec-b765ec2c72c9",
+      "name": "Ergebnisse zusammenführen",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        880,
+        576
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Variante 1 – Ohne API Key\nHier wird KEIN Schlüssel mitgesendet.\nDie API antwortet mit **401 Unauthorized**.\n\n➡️ Ein API Key identifiziert die Anwendung und berechtigt zum Datenzugriff. Ohne Key = kein Zugriff.\n\n*(On Error = Continue, damit der Workflow trotz Fehler weiterläuft.)*",
+        "height": 308,
+        "width": 348,
+        "color": 3
+      },
+      "id": "ba48cc28-6f9a-4112-8591-e62858f5421f",
+      "name": "Sticky Variante 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -832,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Variante 2 – Key als URL-Parameter\nDer Key wird direkt als Query-Parameter angehängt:\n`?appid=xyz123`\n\n➡️ Funktioniert, ist aber **unsicher**: Der Key landet in Server-Logs, Browser-History und Proxies.",
+        "height": 280,
+        "width": 364,
+        "color": 4
+      },
+      "id": "974e6ea9-915e-4ef0-acfd-d0ec687c9d58",
+      "name": "Sticky Variante 2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -944,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Variante 3 – n8n Credentials (Best Practice)\nDer Key wird über **Generic Credential Type → Query Auth** verwaltet (Credential \"OpenWeather Demo\").\n\n➡️ Der Key wird NIE hardcodet, sondern zentral & verschlüsselt im Credentials-System gespeichert. Oft mit **Rate Limits** kombiniert.",
+        "height": 316,
+        "width": 368,
+        "color": 5
+      },
+      "id": "31cd020c-fa14-436d-880a-11ce35dbb7c3",
+      "name": "Sticky Variante 3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -848,
+        864
+      ]
+    },
+    {
+      "parameters": {
+        "content": "# API Keys – Demo\nEin **API Key** ist ein eindeutiger Schlüssel, der:\n- die Anwendung **identifiziert**\n- zum **Datenzugriff berechtigt**\n- oft mit **Rate Limits** kombiniert ist\n\nDrei Zweige zeigen drei Wege, den Key zu übergeben.",
+        "height": 292,
+        "width": 400,
+        "color": 6
+      },
+      "id": "e5d7d0ce-c15b-40ca-9e2b-68bcd19bb731",
+      "name": "Sticky Intro",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        -16
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manueller Start": {
+      "main": [
+        [
+          {
+            "node": "Ohne API Key (schlägt fehl)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Key als URL-Parameter",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Key über n8n Credentials (Best Practice)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ohne API Key (schlägt fehl)": {
+      "main": [
+        [
+          {
+            "node": "Ergebnis: Ohne Key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Key als URL-Parameter": {
+      "main": [
+        [
+          {
+            "node": "Ergebnis: Key in URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Key über n8n Credentials (Best Practice)": {
+      "main": [
+        [
+          {
+            "node": "Ergebnis: Credentials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ergebnis: Ohne Key": {
+      "main": [
+        [
+          {
+            "node": "Ergebnisse zusammenführen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ergebnis: Key in URL": {
+      "main": [
+        [
+          {
+            "node": "Ergebnisse zusammenführen",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Ergebnis: Credentials": {
+      "main": [
+        [
+          {
+            "node": "Ergebnisse zusammenführen",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "25bf9254-c15e-4cde-8e88-8589228b8c2c",
+  "nodeGroups": [],
+  "id": "XrBxmm3uaZhspUrG",
+  "tags": []
+}

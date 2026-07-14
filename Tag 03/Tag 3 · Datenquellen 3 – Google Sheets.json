@@ -1,0 +1,74 @@
+{
+  "name": "Tag 3 · Datenquellen 3: Google Sheets",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "91b34bcb-7cb1-4cfc-8edd-ed0e78c5c752",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1DytRjrUwxsIrh3GPFl1tH8oTWcFBa_lcv731GDZqjT0",
+          "mode": "list",
+          "cachedResultName": "Social Media Plan - Alles Wird Gut",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DytRjrUwxsIrh3GPFl1tH8oTWcFBa_lcv731GDZqjT0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "0",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "40efb770-8251-4340-aa44-1a2bc5905500",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Rpu9Eu9dS93ijAtD",
+          "name": "Google Sheets account 78"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "41da72d8-effb-4fee-8e4d-bbae9d588433",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "id": "Uj9sSV1NRzfK6WCL",
+  "tags": []
+}

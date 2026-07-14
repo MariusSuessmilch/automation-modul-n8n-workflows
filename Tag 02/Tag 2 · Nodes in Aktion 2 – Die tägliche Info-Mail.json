@@ -1,0 +1,154 @@
+{
+  "name": "Tag 2 · Nodes in Aktion 2: Die tägliche Info-Mail",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "id": "b1138ebc-330c-4e40-8373-2a0a07112f1e",
+      "name": "Jeden Morgen um 7 Uhr",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        96,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://wttr.in/Berlin?format=3",
+        "options": {}
+      },
+      "id": "8f7aadb6-9afa-4d0e-80dc-07270d6302eb",
+      "name": "Wetter holen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        416,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "deine@mail.de",
+        "toEmail": "deine@mail.de",
+        "options": {}
+      },
+      "id": "af4da7fc-765e-4b0d-be12-ac271f0e2d34",
+      "name": "Als E-Mail verschicken",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        736,
+        512
+      ],
+      "webhookId": "8060348e-4c2a-44e7-acd1-c49391cf4298",
+      "credentials": {
+        "smtp": {
+          "id": "gsddNnsWah1gDAHb",
+          "name": "SMTP account 30"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# 2 – Die tägliche Info-Mail\n\n**Automatik statt Klick:** läuft z.B. jeden Morgen um 7:00 und schickt dir das Wetter per Mail.\n\n**Lernziel:** Ein Trigger muss nicht manuell sein – die Uhrzeit kann auslösen, und man reiht mehrere Aktionen hintereinander.\n\nDenkmodell: **Auslöser (Wann?) → Aktion (Was?) → Aktion (Was?)**",
+        "height": 252,
+        "width": 652,
+        "color": 6
+      },
+      "id": "ff54e4c9-953c-4404-bef0-d65aa5144510",
+      "name": "Übersicht",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        48,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Auslöser · Wann?\nEine **Zeitschaltuhr**, die deinen Finger ersetzt.",
+        "color": 4
+      },
+      "id": "f27403fd-6aae-4f8a-a443-c5b96945c856",
+      "name": "Note Schedule",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        48,
+        672
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Aktion · Was?\nHolt die **aktuellen Daten** aus dem Netz (hier: Wetter).",
+        "color": 5
+      },
+      "id": "6d43a0a7-c556-4778-9344-1724011357f2",
+      "name": "Note HTTP",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        368,
+        672
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Aktion · Was?\nVerschickt das Ergebnis als **E-Mail**.",
+        "color": 5
+      },
+      "id": "1452d7ef-71e7-461f-814a-9e303512922e",
+      "name": "Note Email",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        688,
+        672
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Jeden Morgen um 7 Uhr": {
+      "main": [
+        [
+          {
+            "node": "Wetter holen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wetter holen": {
+      "main": [
+        [
+          {
+            "node": "Als E-Mail verschicken",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "64d45a5f-9647-46e8-abcb-953eb87df5d1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "id": "bwJrufVvSKikXzhl",
+  "tags": []
+}

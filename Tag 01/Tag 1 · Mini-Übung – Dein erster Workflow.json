@@ -1,0 +1,80 @@
+{
+  "name": "Tag 1 · Mini-Übung: Dein erster Workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n-0001",
+      "name": "Auf Knopfdruck starten",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "gruss",
+              "value": "Hallo n8n",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "datum",
+              "value": "={{ $now }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0002",
+      "name": "Gruß setzen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Mini-Übung Tag 1\n**Auf Knopfdruck starten → Gruß setzen**\n\nKlick auf *Test workflow*. Fertig, sobald im Output-Panel das Feld `gruss` mit \"Hallo n8n\" auftaucht.",
+        "height": 200,
+        "width": 360,
+        "color": 4
+      },
+      "id": "sticky-0003",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        40
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Auf Knopfdruck starten": {
+      "main": [
+        [
+          {
+            "node": "Gruß setzen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

@@ -1,0 +1,62 @@
+{
+  "name": "Tag 3 · Datenquellen 1: OpenWeather API",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a3357063-6567-4043-a647-2e0c09eb343e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "cityName": "Berlin,DE"
+      },
+      "type": "n8n-nodes-base.openWeatherMap",
+      "typeVersion": 1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "71e0ad1d-dcd7-45f3-893b-e5a6397c842c",
+      "name": "OpenWeatherMap",
+      "credentials": {
+        "openWeatherMapApi": {
+          "id": "id0zN6q9jL9WqmUk",
+          "name": "OpenWeatherMap account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "OpenWeatherMap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "34c19988-39f2-4502-bcce-873ce766d9c1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "id": "mSErXrPzJ2HwXeRc",
+  "tags": []
+}

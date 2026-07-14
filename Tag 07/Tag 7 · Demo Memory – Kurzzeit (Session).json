@@ -1,0 +1,132 @@
+{
+  "name": "Tag 7 · Demo Memory: Kurzzeit (Session)",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "1c576e60-def0-432e-a72d-25cf3d4e08ec",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -512,
+        -384
+      ],
+      "webhookId": "f1237032-c324-4200-884b-cd04f1556b5c"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Du bist ein hilfsbereiter Assistent. Antworte kurz und auf Deutsch."
+        }
+      },
+      "id": "189caf37-af02-49a5-ac3d-86312c3da145",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -240,
+        -384
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.4-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5.4-mini"
+        },
+        "options": {}
+      },
+      "id": "ffdcd646-fbaf-4fa9-ad23-878a200c6a09",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -368,
+        -144
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "1yk2ThxfSTU2Tunm",
+          "name": "KIMA OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "29017184-6e10-4e38-8f23-ff47addb3ac6",
+      "name": "Simple Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -144,
+        -144
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Kurzzeit-Gedächtnis (Session)\n\n**Short-term = Post-it:** Nenn im Chat deinen Namen und frag zwei Nachrichten später danach — der Agent weiß ihn. Neue Session (Chat neu laden): weg.",
+        "height": 240,
+        "width": 420,
+        "color": 4
+      },
+      "id": "95571b02-4eb2-49ea-96f9-ee705952c496",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -544,
+        -672
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7e99f4f2-bf6d-4e45-bc50-7a889b33a350",
+  "nodeGroups": [],
+  "id": "UJKxLU6KQMJPvoQU",
+  "tags": []
+}

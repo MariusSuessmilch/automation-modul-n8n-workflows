@@ -1,0 +1,141 @@
+{
+  "name": "Tag 2 · Extra: Split Out Beispiel",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Split Out Beispiel\n\n**Was macht dieser Workflow?**\nTeilt eine Liste von Elementen auf und verarbeitet sie einzeln.\n\n**So testest du ihn:**\n1. Klicke Execute Workflow\n2. Der Code erstellt eine Liste mit mehreren Personen\n3. Split Out teilt diese in einzelne Items auf\n4. Jedes Item wird separat verarbeitet",
+        "height": 316,
+        "width": 500,
+        "color": 4
+      },
+      "id": "8f914d60-6807-4664-a41e-50f3dc3453e4",
+      "name": "Anleitung",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        -64
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "7358f3e6-d76f-4502-853a-d28ce0ab32ab",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        256,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const personen = [\n  { name: 'Anna', alter: 25, stadt: 'Berlin' },\n  { name: 'Max', alter: 30, stadt: 'München' },\n  { name: 'Lisa', alter: 28, stadt: 'Hamburg' },\n  { name: 'Tom', alter: 35, stadt: 'Köln' }\n];\n\nreturn [{ personen }];"
+      },
+      "id": "70c82b93-03fc-470a-b3bd-345b72be23bd",
+      "name": "Liste erstellen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "personen",
+        "options": {}
+      },
+      "id": "f3b232f5-e9f9-4188-a423-b9fe8996f91c",
+      "name": "Split Out",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        752,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1",
+              "name": "greeting",
+              "value": "={{ \"Hallo \" + $json.name + \" aus \" + $json.stadt }}",
+              "type": "string"
+            },
+            {
+              "id": "2",
+              "name": "isAdult",
+              "value": "={{ $json.alter >= 18 }}",
+              "type": "boolean"
+            },
+            {
+              "id": "3",
+              "name": "category",
+              "value": "={{ $json.alter < 30 ? \"Jung\" : \"Erfahren\" }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2fbefc51-769f-485d-9f2a-3d0c9d901c73",
+      "name": "Person verarbeiten",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1008,
+        304
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Liste erstellen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Liste erstellen": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Person verarbeiten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "381461b9-9cc2-4b08-9632-6f3c09b79709",
+  "nodeGroups": [],
+  "id": "GFphfqq9XlYoqFHX",
+  "tags": []
+}

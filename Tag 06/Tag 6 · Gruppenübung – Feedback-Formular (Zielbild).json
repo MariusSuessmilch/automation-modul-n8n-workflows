@@ -1,0 +1,120 @@
+{
+  "name": "Tag 6 · Gruppenübung: Feedback-Formular (Zielbild)",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "feedback",
+        "formTitle": "Feedback",
+        "formDescription": "Sag uns, was du denkst.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "fieldType": "text",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "E-Mail",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Nachricht",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0040",
+      "name": "Feedback-Formular",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "status",
+              "value": "neu",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0041",
+      "name": "Status setzen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n-0042",
+      "name": "Ende (No Operation)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Feedback-Formular (Zielbild)\nZielzustand der Gruppenübung: **Claude** baut die Felder *Name* + *Nachricht*, das **E-Mail**-Feld rüstet ihr von Hand nach.\n\nDas Formular ist der Auslöser, danach wird der Status gesetzt.",
+        "height": 210,
+        "width": 420,
+        "color": 4
+      },
+      "id": "sticky-0043",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        40
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Feedback-Formular": {
+      "main": [
+        [
+          {
+            "node": "Status setzen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Status setzen": {
+      "main": [
+        [
+          {
+            "node": "Ende (No Operation)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

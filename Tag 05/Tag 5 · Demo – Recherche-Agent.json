@@ -1,0 +1,244 @@
+{
+  "name": "Tag 5 · Demo: Recherche-Agent",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n-0031",
+      "name": "Auf Knopfdruck starten",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "auftrag",
+              "value": "Recherchiere die drei wichtigsten Wettbewerber im Markt für KI-gestützte Recruiting-Software und fasse je Stärken und Schwächen zusammen.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0032",
+      "name": "Auftrag setzen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.auftrag }}",
+        "options": {
+          "systemMessage": "Du bist Marktanalyst. Recherchiere Wettbewerber. Nutze die Web-Suche für aktuelle Informationen und antworte strukturiert auf Deutsch: pro Wettbewerber Name, Stärken, Schwächen. Nenne deine Quellen."
+        }
+      },
+      "id": "n-0033",
+      "name": "Marktanalyst",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.4-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5.4-mini"
+        },
+        "options": {}
+      },
+      "id": "n-0034",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        360,
+        540
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "1yk2ThxfSTU2Tunm",
+          "name": "KIMA OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "n-0035",
+      "name": "Web-Suche (SerpAPI)",
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        540,
+        540
+      ],
+      "credentials": {
+        "serpApi": {
+          "id": "IPOPBve15L0tYUPm",
+          "name": "SerpAPI"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "n-0036",
+      "name": "Calculator",
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        720,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Baut aus der Agent-Antwort ($json.output) eine schlichte HTML-Report-Seite.\nconst item = $input.first().json;\n\nconst esc = (s) => String(s ?? '')\n  .replace(/&/g, '&amp;')\n  .replace(/</g, '&lt;')\n  .replace(/>/g, '&gt;');\n\nconst auftrag = esc($('Auftrag setzen').first().json.auftrag);\nconst report = esc(String(item.output ?? '').trim());\nconst datum = new Date().toLocaleString('de-DE', { dateStyle: 'long', timeStyle: 'short' });\n\nconst html = `<!DOCTYPE html>\n<html lang=\"de\">\n<head><meta charset=\"utf-8\"><title>Markt-Report</title>\n<style>\n  body { margin:0; padding:48px 24px; background:#fafafa; color:#212121;\n    font-family: system-ui, -apple-system, sans-serif; line-height:1.6; }\n  .sheet { max-width:760px; margin:0 auto; background:#fff; border:1px solid #e8e8e8;\n    border-radius:14px; overflow:hidden; }\n  header { background:#212121; color:#fafafa; padding:32px 40px; }\n  .eyebrow { text-transform:uppercase; letter-spacing:.14em; font-size:11px;\n    color:#87cdcb; margin:0 0 10px; }\n  header h1 { margin:0; font-size:26px; font-weight:600; }\n  .auftrag { padding:20px 40px; background:#f4fbfb; border-bottom:1px solid #e8e8e8;\n    font-size:14px; }\n  main { padding:32px 40px; white-space:pre-wrap; font-size:15px; }\n  footer { text-align:center; color:#a0a0a0; font-size:11px; padding:20px; }\n</style></head>\n<body><div class=\"sheet\">\n  <header><p class=\"eyebrow\">Recherche-Agent</p><h1>Markt-Report</h1></header>\n  <div class=\"auftrag\"><strong>Auftrag:</strong> ${auftrag}</div>\n  <main>${report}</main>\n  <footer>Erzeugt von n8n · ${datum}</footer>\n</div></body></html>`;\n\nconst htmlBase64 = Buffer.from(html, 'utf8').toString('base64');\nreturn [{ json: { ...item, html, htmlBase64 } }];"
+      },
+      "id": "n-0037",
+      "name": "Report rendern",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "htmlBase64",
+        "options": {
+          "fileName": "markt-report.html",
+          "mimeType": "text/html"
+        }
+      },
+      "id": "n-0038",
+      "name": "Report als HTML-Datei",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        960,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Recherche-Agent\nDer Agent nutzt **Web-Suche** und **Calculator** als Tools.\n\nDie Slide zeigt Gmail/Telegram als Ausgang – auf dem Kurs-Server ersetzt eine **HTML-Datei** den Versand (keine Credentials nötig).",
+        "height": 210,
+        "width": 400,
+        "color": 4
+      },
+      "id": "sticky-0039",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        480,
+        40
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Auf Knopfdruck starten": {
+      "main": [
+        [
+          {
+            "node": "Auftrag setzen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auftrag setzen": {
+      "main": [
+        [
+          {
+            "node": "Marktanalyst",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Marktanalyst": {
+      "main": [
+        [
+          {
+            "node": "Report rendern",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Report rendern": {
+      "main": [
+        [
+          {
+            "node": "Report als HTML-Datei",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Marktanalyst",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Web-Suche (SerpAPI)": {
+      "ai_tool": [
+        [
+          {
+            "node": "Marktanalyst",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "Marktanalyst",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "tags": []
+}

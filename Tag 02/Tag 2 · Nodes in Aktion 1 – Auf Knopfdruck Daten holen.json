@@ -1,0 +1,100 @@
+{
+  "name": "Tag 2 · Nodes in Aktion 1: Auf Knopfdruck Daten holen",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "89d21365-99a4-4899-8e9e-79e8ae3e2196",
+      "name": "Auf Knopfdruck starten",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        672,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://randomuser.me/api/",
+        "options": {}
+      },
+      "id": "a65dcf29-b8e7-4afb-8b65-0a62bd31a3be",
+      "name": "Zufälligen Nutzer holen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        992,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "content": "# 1 – Auf Knopfdruck Daten holen\n\nEin Workflow ist immer **Auslöser + Aktion**. Klick auf *Test workflow* und schau dir rechts das Ergebnis an.\n\n**Lernziel:** Alles startet mit einem Trigger, dann folgt eine Aktion.\n\nDenkmodell: **Auslöser (Wann?) → Aktion (Was?) → Entscheidung (Wie?)**",
+        "height": 268,
+        "width": 508,
+        "color": 6
+      },
+      "id": "609c57fc-2c90-4547-90d7-6749003d93cb",
+      "name": "Übersicht",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        656,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Auslöser · Wann?\nDer **Startknopf**, den DU selbst drückst.",
+        "color": 4
+      },
+      "id": "75302a40-10ff-4a30-ac29-3793022eed56",
+      "name": "Note Trigger",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        624,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Aktion · Was?\nEin **Bote**, der eine Webseite/einen Dienst aufruft und die Antwort zurückbringt – hier ein zufälliger Nutzer von randomuser.me.",
+        "height": 240,
+        "width": 360,
+        "color": 5
+      },
+      "id": "fb5946c0-fece-49ca-85f5-3f3ace2ba5f9",
+      "name": "Note HTTP",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        944,
+        688
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Auf Knopfdruck starten": {
+      "main": [
+        [
+          {
+            "node": "Zufälligen Nutzer holen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "a31e9dcb-9065-4b91-8c24-3bfe49fc99bc",
+  "nodeGroups": [],
+  "id": "GNiTwgC4B20nVCpX",
+  "tags": []
+}

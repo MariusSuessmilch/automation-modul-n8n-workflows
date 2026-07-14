@@ -1,0 +1,105 @@
+{
+  "name": "Tag 5 · Demo Claude in Chrome: Zielbild",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n-0027",
+      "name": "Auf Knopfdruck starten",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://randomuser.me/api/",
+        "options": {}
+      },
+      "id": "n-0028",
+      "name": "Zufälligen Nutzer holen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "name",
+              "value": "={{ $json.results[0].name.first }} {{ $json.results[0].name.last }}",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "stadt",
+              "value": "={{ $json.results[0].location.city }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0029",
+      "name": "Felder aufräumen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Zielbild: Claude in Chrome\nDiesen Workflow baut **Claude in Chrome** in der Live-Demo. Das hier ist das **Zielbild** zum Vergleichen:\n\nAPI abfragen → die tief verschachtelte Antwort auf `name` und `stadt` eindampfen.",
+        "height": 210,
+        "width": 420,
+        "color": 4
+      },
+      "id": "sticky-0030",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        40
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Auf Knopfdruck starten": {
+      "main": [
+        [
+          {
+            "node": "Zufälligen Nutzer holen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zufälligen Nutzer holen": {
+      "main": [
+        [
+          {
+            "node": "Felder aufräumen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

@@ -1,0 +1,96 @@
+{
+  "name": "Tag 2 · Übung E-Mail-Workflow: Tagesgruß-Mail (8:00)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 8,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "n-0004",
+      "name": "Jeden Morgen um 8",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "kurs@example.de",
+        "toEmail": "deine@mail.de",
+        "subject": "Guten Morgen!",
+        "emailFormat": "text",
+        "text": "Hallo, es ist 8 Uhr – Zeit, produktiv zu starten!",
+        "options": {}
+      },
+      "id": "n-0005",
+      "name": "Als E-Mail verschicken",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Auslöser · Wann?\nJeden Tag um **8:00 Uhr** startet der Workflow automatisch – ohne Knopfdruck.",
+        "height": 180,
+        "width": 300,
+        "color": 5
+      },
+      "id": "sticky-0006",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Aktion · Was?\nVerschickt eine feste Gruß-Mail.\n\n⚠️ Am Mail-Node erst eine **SMTP-Credential** eintragen (Warndreieck), dann den Workflow publishen/aktivieren.",
+        "height": 200,
+        "width": 340,
+        "color": 3
+      },
+      "id": "sticky-0007",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        40
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Jeden Morgen um 8": {
+      "main": [
+        [
+          {
+            "node": "Als E-Mail verschicken",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

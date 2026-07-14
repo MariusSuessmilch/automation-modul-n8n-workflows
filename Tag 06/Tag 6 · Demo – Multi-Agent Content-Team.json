@@ -1,0 +1,633 @@
+{
+  "name": "Tag 6 · Demo: Multi-Agent Content-Team",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "9d925588-0de0-4930-af3f-bff18d0ce891",
+      "name": "Web-Suche (SerpAPI)",
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        -1984,
+        336
+      ],
+      "credentials": {
+        "serpApi": {
+          "id": "IPOPBve15L0tYUPm",
+          "name": "SerpAPI"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.4-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5.4-mini"
+        },
+        "options": {}
+      },
+      "id": "960dedb7-ed6d-43ed-b6db-21f3d7bec142",
+      "name": "OpenAI Chat Model 3",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -912,
+        336
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "1yk2ThxfSTU2Tunm",
+          "name": "KIMA OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.4-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5.4-mini"
+        },
+        "options": {}
+      },
+      "id": "d3a6d526-c77b-498b-a5e7-2bc0d144503f",
+      "name": "OpenAI Chat Model 2",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1520,
+        336
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "1yk2ThxfSTU2Tunm",
+          "name": "KIMA OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5.4-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5.4-mini"
+        },
+        "options": {}
+      },
+      "id": "d7f6b787-8cad-4acc-8481-7fceb33c579e",
+      "name": "OpenAI Chat Model 1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -2144,
+        336
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "1yk2ThxfSTU2Tunm",
+          "name": "KIMA OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "g1",
+              "leftValue": "={{ $json.maxReached }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c6801406-1350-4aec-9f7f-fb3ab5b8ef90",
+      "name": "MAX 2x erreicht?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Zaehlt die Korrektur-Versuche. $runIndex zaehlt ab 0 pro Node-Lauf.\nconst iter = $runIndex + 1;\nconst item = $input.first().json;\n\nreturn [{\n  json: {\n    ...item,\n    iteration: iter,\n    maxReached: iter >= 2,\n  },\n}];"
+      },
+      "id": "265caa5c-a3f1-4169-b1b2-c7fc75930e9a",
+      "name": "Count_Iterations",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f1",
+              "leftValue": "={{ $json.approved }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "0e5d589d-ae1b-48a3-87d1-097f0b047e0f",
+      "name": "FREIGABE?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -304,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parst die Antwort von Agent 3: FREIGABE JA/NEIN + Feedback\nconst antwort = $input.first().json.output || '';\nconst approved = /FREIGABE:\\s*JA/i.test(antwort);\nconst feedback = antwort.replace(/FREIGABE:\\s*(JA|NEIN)/i, '').trim();\n\nreturn [{\n  json: {\n    topic: $('Thema setzen').first().json.topic,\n    trends: $('Trends sichern').first().json.trends,\n    postDraft: $('Entwurf sichern').first().json.postDraft,\n    brandCheck: antwort,\n    approved,\n    feedback: approved ? '' : feedback,\n  },\n}];"
+      },
+      "id": "450fd538-d025-4ace-be00-b26c9296720e",
+      "name": "Extract_Approval",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -512,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Zu pruefender LinkedIn-Post:\n\n{{ $json.postDraft }}",
+        "options": {
+          "systemMessage": "Du bist Brand-Checker und pruefst LinkedIn-Posts gegen den Style Guide.\n\nHARTE REGELN (nur diese sind Ablehnungsgruende):\n1. Verbotene Floskeln: game-changer, Gamechanger, revolutionaer, disruptiv, bahnbrechend, Must-have.\n2. Hashtags im Post.\n3. Laenger als 1300 Zeichen.\n4. Konkrete Zahlen- oder Faktenbehauptung ohne Quelle oder Beispiel.\n5. Reine Buzzword-Kette ohne Aussage.\n\nFREIGABE-SCHWELLE (wichtig):\nPruefe ausschliesslich die fuenf harten Regeln. Liegt KEIN harter Verstoss vor, gib frei.\nStilistische Vorlieben, Geschmacksfragen oder \"koennte noch besser sein\" sind KEIN Ablehnungsgrund.\nIm Zweifel: FREIGABE: JA.\nWenn der Post eine ueberarbeitete Fassung ist und die zuvor genannten Kritikpunkte eingearbeitet\nwurden, gib frei, statt neue Kritikpunkte zu suchen.\n\nAntwortformat (exakt einhalten):\nZeile 1 ist IMMER entweder \"FREIGABE: JA\" oder \"FREIGABE: NEIN\".\nDanach eine kurze Begruendung (bei JA: was ueberzeugt).\nBei NEIN: pro Verstoss ein Bullet mit der verletzten Regel und dem konkreten Fix."
+        }
+      },
+      "id": "0ff74334-87ac-4e8b-ac9d-38d88bedbc5c",
+      "name": "Agent 3: Brand-Checker",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -896,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c1",
+              "name": "postDraft",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a99d4c63-d00b-4dcf-9168-838053d09377",
+      "name": "Entwurf sichern",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1120,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Thema: {{ $json.topic }}\n\nRecherchierte Trends:\n{{ $json.trends }}\n\nVorheriger Entwurf (leer = erster Versuch):\n{{ $json.postDraft || '' }}\n\nFeedback aus dem Brand-Check (leer = erster Versuch):\n{{ $json.feedback || '' }}",
+        "options": {
+          "systemMessage": "Du bist Content-Creator. Schreibe aus den Trends EINEN LinkedIn-Post.\n\nRegeln:\n- Starker Hook in den ersten 2 Zeilen.\n- Klarer Mehrwert fuer die Leser, konkret statt allgemein.\n- Call-to-Action am Ende.\n- Unter 1300 Zeichen.\n- Keine Hashtags.\n- Antworte nur mit dem Post-Text, ohne Vorrede.\n\nWenn Feedback aus dem Brand-Check vorliegt: arbeite es ein und behebe genau die genannten Punkte."
+        }
+      },
+      "id": "93d6911e-d3b5-4943-9d6a-7ae69fb89da3",
+      "name": "Agent 2: Content-Creator",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -1504,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b1",
+              "name": "topic",
+              "value": "={{ $('Thema setzen').item.json.topic }}",
+              "type": "string"
+            },
+            {
+              "id": "b2",
+              "name": "trends",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "b3",
+              "name": "feedback",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "b4",
+              "name": "postDraft",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "525979fe-56e9-44b9-8f24-4c3575141dba",
+      "name": "Trends sichern",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1712,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Thema: {{ $json.topic }}",
+        "options": {
+          "systemMessage": "Du bist Trend-Researcher in einem Content-Team.\n\nAufgabe: Finde genau 3 aktuelle Top-Trends zum genannten Thema.\n\nFormat pro Trend (exakt einhalten):\nTitel: <kurzer Titel>\nBeschreibung: <2 Saetze>\nQuelle: <Quelle oder URL>\nRelevanz: <1 Satz, warum das fuer die Zielgruppe zaehlt>\n\nRegeln:\n- Keine Einleitung, keine Zusammenfassung, kein Smalltalk.\n- Antworte nur mit den 3 Trends im obigen Format.\n- Nutze das Such-Tool, wenn es verfuegbar ist, um aktuelle Quellen zu finden."
+        }
+      },
+      "id": "1484b773-0625-4bad-8e87-608411589d7e",
+      "name": "Agent 1: Trend-Researcher",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -2096,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "topic",
+              "value": "KI-Trends im Recruiting",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "feedback",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "a3",
+              "name": "postDraft",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2ed76466-2b57-4fd9-9dc5-a114862625cf",
+      "name": "Thema setzen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2320,
+        128
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "674ce7d2-37f3-4401-a492-553189980642",
+      "name": "Manueller Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2544,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Rendert den freigegebenen LinkedIn-Post als schön formatierte HTML-Vorschau.\nconst item = $input.first().json;\n\nconst esc = (s) => String(s ?? '')\n  .replace(/&/g, '&amp;')\n  .replace(/</g, '&lt;')\n  .replace(/>/g, '&gt;')\n  .replace(/\"/g, '&quot;')\n  .replace(/'/g, '&#39;');\n\nconst rawPost = String(item.postDraft ?? '').trim();\nconst rawTrends = String(item.trends ?? '');\n\nconst topic = esc(item.topic);\nconst post = esc(rawPost);\nconst brandCheck = esc(String(item.brandCheck ?? '').trim());\nconst zeichen = rawPost.length;\n\nconst urls = [...new Set(rawTrends.match(/https?:\\/\\/[^\\s)<>\"']+/g) || [])].slice(0, 12);\nconst quellen = urls.length\n  ? urls.map((u) => `<li><a href=\"${esc(u)}\">${esc(u)}</a></li>`).join('\\n')\n  : '<li class=\"leer\">Keine verlinkten Quellen im Recherche-Output gefunden.</li>';\n\nconst datum = new Date().toLocaleString('de-DE', { dateStyle: 'long', timeStyle: 'short' });\n\nconst html = `<!DOCTYPE html>\n<html lang=\"de\">\n<head>\n<meta charset=\"utf-8\">\n<title>LinkedIn-Post: ${topic}</title>\n<style>\n  *, *::before, *::after { box-sizing: border-box; }\n  body { margin:0; padding:48px 24px; background:#fafafa; color:#212121;\n    font-family: system-ui, -apple-system, \"Segoe UI\", sans-serif; line-height:1.6;\n    -webkit-font-smoothing:antialiased; }\n  .sheet { max-width:760px; margin:0 auto; }\n  header { background:#212121; color:#fafafa; border-radius:14px 14px 0 0; padding:34px 40px; }\n  .eyebrow { text-transform:uppercase; letter-spacing:.14em; font-size:11px; font-weight:600;\n    color:#87cdcb; margin:0 0 10px; }\n  header h1 { margin:0; font-size:28px; font-weight:600; letter-spacing:-.01em; }\n  .badge { display:inline-block; margin-top:18px; padding:6px 14px; border-radius:999px;\n    font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;\n    background:#87cdcb; color:#12302f; }\n  .meta { display:flex; flex-wrap:wrap; gap:32px; margin:0; background:#fff;\n    border:1px solid #e8e8e8; border-top:none; padding:20px 40px; }\n  .meta dt { color:#8a8a8a; font-size:11px; text-transform:uppercase; letter-spacing:.08em;\n    margin-bottom:3px; }\n  .meta dd { margin:0; font-weight:600; font-size:14px; }\n  main { background:#fff; border:1px solid #e8e8e8; border-top:none; border-radius:0 0 14px 14px;\n    padding:40px; }\n  section + section { margin-top:40px; }\n  h2 { font-size:12px; text-transform:uppercase; letter-spacing:.12em; color:#cc8a7a;\n    margin:0 0 16px; font-weight:700; }\n  .post { border:1px solid #e0e0e0; border-radius:12px; overflow:hidden; }\n  .author { display:flex; align-items:center; gap:12px; padding:16px 20px;\n    border-bottom:1px solid #f0f0f0; }\n  .avatar { width:44px; height:44px; border-radius:50%; background:#212121; color:#87cdcb;\n    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; flex:none; }\n  .author-name { font-weight:600; font-size:15px; }\n  .author-sub { font-size:12px; color:#767676; }\n  .post-body { padding:22px 20px; white-space:pre-wrap; font-size:15px; }\n  .post-foot { padding:12px 20px; border-top:1px solid #f0f0f0; background:#fbfbfb;\n    font-size:12px; color:#767676; display:flex; justify-content:space-between; gap:12px; }\n  ul.quellen { list-style:none; margin:0; padding:0; }\n  ul.quellen li { padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:14px; word-break:break-all; }\n  ul.quellen li:last-child { border-bottom:none; }\n  ul.quellen a { color:#212121; text-decoration:none; border-bottom:2px solid #87cdcb; }\n  .leer { color:#999; font-style:italic; }\n  .brand { background:#f4fbfb; border-left:4px solid #87cdcb; border-radius:0 8px 8px 0;\n    padding:18px 22px; white-space:pre-wrap; font-size:14px; }\n  footer { text-align:center; color:#a0a0a0; font-size:11px; padding:28px 0 0; }\n</style>\n</head>\n<body>\n<div class=\"sheet\">\n  <header>\n    <p class=\"eyebrow\">Multi-Agent Content-Team</p>\n    <h1>LinkedIn-Post</h1>\n    <span class=\"badge\">Freigegeben</span>\n  </header>\n  <dl class=\"meta\">\n    <div><dt>Thema</dt><dd>${topic}</dd></div>\n    <div><dt>Länge</dt><dd>${zeichen} Zeichen</dd></div>\n    <div><dt>Erstellt</dt><dd>${datum}</dd></div>\n  </dl>\n  <main>\n    <section>\n      <h2>Post-Vorschau</h2>\n      <div class=\"post\">\n        <div class=\"author\">\n          <div class=\"avatar\">KI</div>\n          <div>\n            <div class=\"author-name\">KI-Manager Demo</div>\n            <div class=\"author-sub\">Automatisiert erstellt vom Content-Team</div>\n          </div>\n        </div>\n        <div class=\"post-body\">${post}</div>\n        <div class=\"post-foot\"><span>${zeichen} Zeichen</span><span>Vom Brand-Check freigegeben</span></div>\n      </div>\n    </section>\n    <section>\n      <h2>Recherche-Quellen</h2>\n      <ul class=\"quellen\">\n${quellen}\n      </ul>\n    </section>\n    <section>\n      <h2>Brand-Check: Freigabe-Begründung</h2>\n      <div class=\"brand\">${brandCheck}</div>\n    </section>\n  </main>\n  <footer>Erzeugt von n8n &middot; Tag 6 Demo: Multi-Agent Content-Team</footer>\n</div>\n</body>\n</html>`;\n\n// Als Base64 -> \"Convert to File\" (Move Base64 String to File) macht daraus die HTML-Datei\nconst htmlBase64 = Buffer.from(html, 'utf8').toString('base64');\n\nreturn [{ json: { ...item, html, htmlBase64, zeichen, quellenAnzahl: urls.length } }];"
+      },
+      "id": "9aaa7cf2-c44a-4cd1-a61c-4223a8f6b872",
+      "name": "LinkedIn-Post rendern",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -96,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "htmlBase64",
+        "options": {
+          "fileName": "linkedin-post-freigegeben.html",
+          "mimeType": "text/html"
+        }
+      },
+      "id": "10d876b6-3b62-413e-98af-c4f51955ed85",
+      "name": "LinkedIn-Post als HTML-Datei",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        128,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Rendert den Eskalations-Report als HTML, wenn der Brand-Check 2x abgelehnt hat.\nconst item = $input.first().json;\n\nconst esc = (s) => String(s ?? '')\n  .replace(/&/g, '&amp;')\n  .replace(/</g, '&lt;')\n  .replace(/>/g, '&gt;')\n  .replace(/\"/g, '&quot;')\n  .replace(/'/g, '&#39;');\n\nconst rawTopic = String(item.topic ?? '').trim();\nconst versuche = Number(item.iteration ?? 2);\n\nconst topic = esc(rawTopic);\nconst entwurf = esc(String(item.postDraft ?? '').trim());\nconst feedback = esc(String(item.feedback ?? '').trim()) || '<span class=\"leer\">Kein Feedback übermittelt.</span>';\nconst brandCheck = esc(String(item.brandCheck ?? '').trim());\nconst betreff = `Freigabe nötig: LinkedIn-Post zu \"${rawTopic}\"`;\nconst datum = new Date().toLocaleString('de-DE', { dateStyle: 'long', timeStyle: 'short' });\n\nconst html = `<!DOCTYPE html>\n<html lang=\"de\">\n<head>\n<meta charset=\"utf-8\">\n<title>Eskalation: ${topic}</title>\n<style>\n  *, *::before, *::after { box-sizing: border-box; }\n  body { margin:0; padding:48px 24px; background:#fafafa; color:#212121;\n    font-family: system-ui, -apple-system, \"Segoe UI\", sans-serif; line-height:1.6;\n    -webkit-font-smoothing:antialiased; }\n  .sheet { max-width:760px; margin:0 auto; }\n  header { background:#212121; color:#fafafa; border-radius:14px 14px 0 0; padding:34px 40px; }\n  .eyebrow { text-transform:uppercase; letter-spacing:.14em; font-size:11px; font-weight:600;\n    color:#db73a6; margin:0 0 10px; }\n  header h1 { margin:0; font-size:28px; font-weight:600; letter-spacing:-.01em; }\n  .badge { display:inline-block; margin-top:18px; padding:6px 14px; border-radius:999px;\n    font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;\n    background:#db73a6; color:#fff; }\n  .betreff { background:#fff; border:1px solid #e8e8e8; border-top:none; padding:20px 40px;\n    font-size:16px; font-weight:600; }\n  .betreff span { display:block; color:#8a8a8a; font-size:11px; font-weight:600;\n    text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px; }\n  .meta { display:flex; flex-wrap:wrap; gap:32px; margin:0; background:#fff;\n    border:1px solid #e8e8e8; border-top:none; padding:20px 40px; }\n  .meta dt { color:#8a8a8a; font-size:11px; text-transform:uppercase; letter-spacing:.08em;\n    margin-bottom:3px; }\n  .meta dd { margin:0; font-weight:600; font-size:14px; }\n  main { background:#fff; border:1px solid #e8e8e8; border-top:none; border-radius:0 0 14px 14px;\n    padding:40px; }\n  section + section { margin-top:40px; }\n  h2 { font-size:12px; text-transform:uppercase; letter-spacing:.12em; color:#cc8a7a;\n    margin:0 0 16px; font-weight:700; }\n  .todo { background:#212121; color:#fafafa; border-radius:12px; padding:24px 28px; }\n  .todo h3 { margin:0 0 8px; font-size:12px; text-transform:uppercase; letter-spacing:.12em;\n    color:#db73a6; font-weight:700; }\n  .todo p { margin:0; font-size:16px; }\n  .box { border:1px solid #e0e0e0; border-radius:10px; padding:20px 22px; white-space:pre-wrap;\n    font-size:15px; }\n  .kritik { background:#fdf3f8; border-left:4px solid #db73a6; border-radius:0 8px 8px 0;\n    padding:18px 22px; white-space:pre-wrap; font-size:14px; }\n  .leer { color:#999; font-style:italic; }\n  footer { text-align:center; color:#a0a0a0; font-size:11px; padding:28px 0 0; }\n</style>\n</head>\n<body>\n<div class=\"sheet\">\n  <header>\n    <p class=\"eyebrow\">Multi-Agent Content-Team</p>\n    <h1>Eskalation an den Menschen</h1>\n    <span class=\"badge\">Eskalation</span>\n  </header>\n  <div class=\"betreff\"><span>Betreff</span>${esc(betreff)}</div>\n  <dl class=\"meta\">\n    <div><dt>Thema</dt><dd>${topic}</dd></div>\n    <div><dt>Versuche</dt><dd>${versuche} von 2</dd></div>\n    <div><dt>Gemeldet</dt><dd>${datum}</dd></div>\n  </dl>\n  <main>\n    <section>\n      <div class=\"todo\">\n        <h3>Was jetzt zu tun ist</h3>\n        <p>Der Brand-Check hat den Entwurf ${versuche}x abgelehnt. Bitte den Entwurf unten\n        manuell prüfen: freigeben, selbst überarbeiten oder das Thema verwerfen.</p>\n      </div>\n    </section>\n    <section>\n      <h2>Letzter Entwurf</h2>\n      <div class=\"box\">${entwurf}</div>\n    </section>\n    <section>\n      <h2>Feedback des Brand-Checkers</h2>\n      <div class=\"kritik\">${feedback}</div>\n    </section>\n    <section>\n      <h2>Vollständige Brand-Check-Antwort</h2>\n      <div class=\"kritik\">${brandCheck}</div>\n    </section>\n  </main>\n  <footer>Erzeugt von n8n &middot; Tag 6 Demo: Multi-Agent Content-Team</footer>\n</div>\n</body>\n</html>`;\n\n// Als Base64 -> \"Convert to File\" (Move Base64 String to File) macht daraus die HTML-Datei\nconst htmlBase64 = Buffer.from(html, 'utf8').toString('base64');\n\nreturn [{ json: { ...item, html, htmlBase64, eskalation_betreff: betreff } }];"
+      },
+      "id": "ec785591-5b78-4bd6-84ab-5f0908ab611e",
+      "name": "Eskalations-Report rendern",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "htmlBase64",
+        "options": {
+          "fileName": "eskalation-report.html",
+          "mimeType": "text/html"
+        }
+      },
+      "id": "8c163eda-07f7-4bcb-97db-caf7769a0c1c",
+      "name": "Eskalations-Report als HTML-Datei",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        656,
+        320
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "MAX 2x erreicht?": {
+      "main": [
+        [
+          {
+            "node": "Eskalations-Report rendern",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Agent 2: Content-Creator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Count_Iterations": {
+      "main": [
+        [
+          {
+            "node": "MAX 2x erreicht?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FREIGABE?": {
+      "main": [
+        [
+          {
+            "node": "LinkedIn-Post rendern",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Count_Iterations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract_Approval": {
+      "main": [
+        [
+          {
+            "node": "FREIGABE?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model 3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agent 3: Brand-Checker",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent 3: Brand-Checker": {
+      "main": [
+        [
+          {
+            "node": "Extract_Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Entwurf sichern": {
+      "main": [
+        [
+          {
+            "node": "Agent 3: Brand-Checker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model 2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agent 2: Content-Creator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent 2: Content-Creator": {
+      "main": [
+        [
+          {
+            "node": "Entwurf sichern",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trends sichern": {
+      "main": [
+        [
+          {
+            "node": "Agent 2: Content-Creator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Web-Suche (SerpAPI)": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agent 1: Trend-Researcher",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model 1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agent 1: Trend-Researcher",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent 1: Trend-Researcher": {
+      "main": [
+        [
+          {
+            "node": "Trends sichern",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Thema setzen": {
+      "main": [
+        [
+          {
+            "node": "Agent 1: Trend-Researcher",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manueller Start": {
+      "main": [
+        [
+          {
+            "node": "Thema setzen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LinkedIn-Post rendern": {
+      "main": [
+        [
+          {
+            "node": "LinkedIn-Post als HTML-Datei",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eskalations-Report rendern": {
+      "main": [
+        [
+          {
+            "node": "Eskalations-Report als HTML-Datei",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "a7fc07c4-b0fb-48da-8afe-e6dbd82a5f29",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "id": "TdpUVGYYvlMpjax5",
+  "tags": []
+}

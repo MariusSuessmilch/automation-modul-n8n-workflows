@@ -1,0 +1,174 @@
+{
+  "name": "Tag 2 · Nodes in Aktion 3: Vom Formular in die Tabelle",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "formular",
+        "options": {}
+      },
+      "id": "8efff8f7-f954-4963-acea-96ece6d8a376",
+      "name": "Formular empfängt Daten",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -464,
+        -304
+      ],
+      "webhookId": "515201fe-2fc0-4de5-8351-d9ba0bf21e68"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "DEINE_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "KI Manager Ausbildung Termine (5&6)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/DEINE_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1687585038,
+          "mode": "list",
+          "cachedResultName": "Tabellenblatt1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/DEINE_GOOGLE_SHEET_ID/edit#gid=1687585038"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Datum",
+              "displayName": "Datum",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Wochentag",
+              "displayName": "Wochentag",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Modul",
+              "displayName": "Modul",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tag",
+              "displayName": "Tag",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "3c47558c-7b20-4832-b4f7-6823cad37670",
+      "name": "In Tabelle schreiben",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -144,
+        -304
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "qBuqCXx3bXGKbWWn",
+          "name": "Google Sheets Simone"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# 3 – Vom Formular in die Tabelle\n\n**Input von außen:** Füllt jemand dein Web-Formular aus, landet die Antwort automatisch als neue Zeile in Google Sheets.\n\n**Lernziel:** Ein Auslöser kann von einem anderen System kommen – nicht nur von dir oder der Uhr.\n\nDenkmodell: **Auslöser (Wann?) → Aktion (Was?)**",
+        "height": 220,
+        "width": 460,
+        "color": 6
+      },
+      "id": "b7a4af4a-31c8-40de-be96-6d308262708c",
+      "name": "Übersicht",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        -592
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Auslöser · Wann?\nEine **Türklingel**: ein anderes Programm (das Formular) drückt sie und gibt Daten mit.",
+        "height": 170,
+        "width": 260,
+        "color": 4
+      },
+      "id": "80d4d43d-94ab-40c6-9305-d5d5747625af",
+      "name": "Note Webhook",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        -144
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Aktion · Was?\nSchreibt die empfangenen Daten als **neue Zeile** in eine Tabelle.",
+        "height": 170,
+        "width": 260,
+        "color": 5
+      },
+      "id": "91354975-d78b-4dde-8381-12435a4123fc",
+      "name": "Note Sheets",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        -144
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Formular empfängt Daten": {
+      "main": [
+        [
+          {
+            "node": "In Tabelle schreiben",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "9643ac01-1570-41a0-a183-7c5caae96b58",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "id": "KnK2wZ5EfIluqasQ",
+  "tags": []
+}

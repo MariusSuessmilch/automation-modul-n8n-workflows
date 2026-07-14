@@ -1,0 +1,245 @@
+{
+  "name": "Tag 2 · Nodes in Aktion 4: Wichtige Mails ans Team melden",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "9b670528-a4ed-49b0-8b47-6780d95a5ca7",
+      "name": "Start-Knopf",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -656,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://randomuser.me/api/",
+        "options": {}
+      },
+      "id": "ec6de2da-b4af-482a-bd3f-54bd2699feeb",
+      "name": "Nutzer holen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -416,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 4 – Wichtige Mails ans Team melden\n\n**Die erste Entscheidung:** Ein Startknopf holt Daten, dann prüft eine Weiche eine Bedingung und wählt einen von zwei Pfaden.\n\n**Lernziel:** Nicht jeder Pfad macht dasselbe – IF trifft eine Ja/Nein-Entscheidung.\n\n**Denkmodell:** Auslöser (Wann?) → Aktion (Was?) → Entscheidung (Wie?)\n\n*Diese Version läuft ohne Zugangsdaten komplett grün durch – keine roten Warnzeichen.*",
+        "height": 264,
+        "width": 1028,
+        "color": 4
+      },
+      "id": "a99c9dd4-49f4-47f9-ad70-1571d9f5fdea",
+      "name": "Uebersicht",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        -352
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Auslöser · Wann?\nDer **Startknopf**, den DU selbst drückst. Klick auf *Test workflow*.",
+        "height": 224,
+        "width": 204,
+        "color": 3
+      },
+      "id": "85c5fcd8-7cbc-4345-ad2a-04ba5563f174",
+      "name": "note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Aktion · Was?\nEin **Bote**, der einen Dienst aufruft und die Antwort zurückbringt – hier ein zufälliger Nutzer von randomuser.me.",
+        "height": 224,
+        "width": 220,
+        "color": 5
+      },
+      "id": "9b5c1169-5487-4526-99b2-cba154d238b5",
+      "name": "note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Entscheidung · Wie?\nEine **Weiche mit zwei Gleisen**: Bedingung erfüllt → Ja-Pfad, sonst Nein-Pfad.",
+        "height": 224,
+        "width": 220,
+        "color": 2
+      },
+      "id": "f6d4c55f-d75c-416a-9aed-8b1f772aaece",
+      "name": "note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Aktion · Was?\nJe nach Pfad wird eine **Meldung** gesetzt. In echt käme hier z.B. eine Slack-Nachricht.",
+        "height": 208,
+        "width": 220,
+        "color": 6
+      },
+      "id": "88198658-ee4f-4bb8-87a2-fc076942ad4b",
+      "name": "note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        48,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "meldung",
+              "value": "Weibliche Nutzerin gefunden",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "81694628-b74d-4b0d-83c5-2ff85590be69",
+      "name": "Pfad Ja",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        112,
+        -48
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.results[0].gender }}",
+              "rightValue": "female",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a1b00f66-9112-449e-886f-b37eb9bb7b4c",
+      "name": "Person weiblich?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -160,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a2",
+              "name": "meldung",
+              "value": "Maennlicher Nutzer gefunden",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8042ecf9-0712-468e-b32c-0890675f4539",
+      "name": "Pfad Nein",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        112,
+        160
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start-Knopf": {
+      "main": [
+        [
+          {
+            "node": "Nutzer holen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nutzer holen": {
+      "main": [
+        [
+          {
+            "node": "Person weiblich?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Person weiblich?": {
+      "main": [
+        [
+          {
+            "node": "Pfad Ja",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pfad Nein",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "12dc644b-40cf-4b30-9f37-7dcfb7c49b70",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "id": "DhE9dv1Q1CPH2e7d",
+  "tags": []
+}

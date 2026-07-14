@@ -1,0 +1,374 @@
+{
+  "name": "Tag 4 · Hands-on: E-Mail-Klassifizierung (Ausbau)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n-0018",
+      "name": "Auf Knopfdruck starten",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "email_text",
+              "value": "Ihre Rechnung Nr. 4021 ist seit 14 Tagen überfällig. Bitte begleichen Sie den Betrag bis Ende der Woche.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0019",
+      "name": "Beispiel-E-Mail setzen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5.4-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5.4-mini"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Klassifiziere die folgende E-Mail in genau eine Kategorie: Rechnung, Support, Newsletter oder Sonstiges. Antworte nur mit dem Kategoriename, ohne weiteren Text.\nE-Mail: {{ $json.email_text }}",
+              "role": "user"
+            }
+          ]
+        },
+        "simplify": true,
+        "options": {}
+      },
+      "id": "n-0020",
+      "name": "E-Mail klassifizieren",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        480,
+        300
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "1yk2ThxfSTU2Tunm",
+          "name": "KIMA OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "rules",
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r1",
+                    "leftValue": "={{ $json.message.content }}",
+                    "rightValue": "Rechnung",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Rechnung"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r2",
+                    "leftValue": "={{ $json.message.content }}",
+                    "rightValue": "Support",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Support"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r3",
+                    "leftValue": "={{ $json.message.content }}",
+                    "rightValue": "Newsletter",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Newsletter"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r4",
+                    "leftValue": "={{ $json.message.content }}",
+                    "rightValue": "Sonstiges",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Sonstiges"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0021",
+      "name": "Nach Kategorie verzweigen",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "aktion",
+              "value": "an Buchhaltung weiterleiten",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0022",
+      "name": "Rechnung → Buchhaltung",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        960,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "aktion",
+              "value": "Ticket anlegen",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0023",
+      "name": "Support → Ticket",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        960,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "aktion",
+              "value": "archivieren",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0024",
+      "name": "Newsletter → Archiv",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        960,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "aktion",
+              "value": "manuell prüfen",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0025",
+      "name": "Sonstiges → Prüfen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        960,
+        660
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## E-Mail-Klassifizierung (Ausbau)\nDer **Switch** liest die KI-Antwort aus `message.content` und verzweigt in einen von vier Pfaden.\n\nDie Rechnungs-Mail oben muss den **Rechnung**-Zweig nehmen.",
+        "height": 210,
+        "width": 380,
+        "color": 6
+      },
+      "id": "sticky-0026",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        720,
+        40
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Auf Knopfdruck starten": {
+      "main": [
+        [
+          {
+            "node": "Beispiel-E-Mail setzen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Beispiel-E-Mail setzen": {
+      "main": [
+        [
+          {
+            "node": "E-Mail klassifizieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "E-Mail klassifizieren": {
+      "main": [
+        [
+          {
+            "node": "Nach Kategorie verzweigen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nach Kategorie verzweigen": {
+      "main": [
+        [
+          {
+            "node": "Rechnung → Buchhaltung",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Support → Ticket",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Newsletter → Archiv",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sonstiges → Prüfen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

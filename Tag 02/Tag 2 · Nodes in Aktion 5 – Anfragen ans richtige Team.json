@@ -1,0 +1,377 @@
+{
+  "name": "Tag 2 · Nodes in Aktion 5: Anfragen ans richtige Team",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "anfrage",
+        "options": {}
+      },
+      "id": "2f931b22-b3ac-44eb-b963-56285d78da3d",
+      "name": "Anfrage kommt rein",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1104,
+        -368
+      ],
+      "webhookId": "65b33e2e-14ae-4ec5-8fae-516d2c360baf"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.kategorie }}",
+                    "rightValue": "Support",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.kategorie }}",
+                    "rightValue": "Vertrieb",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.kategorie }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEquals"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d12cda46-04f0-4aa8-bbc2-260b62ef6448",
+      "name": "Nach Kategorie sortieren",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -784,
+        -368
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "text": "Neue Support-Anfrage",
+        "otherOptions": {}
+      },
+      "id": "4200c91d-b4ff-4993-9d44-daa38ac51189",
+      "name": "Support → Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        -448,
+        -544
+      ],
+      "webhookId": "a94aedcc-92a8-4eab-828b-26d235c9143c",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "dsdDcINOX4lOKvA4",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "deine@mail.de",
+        "toEmail": "deine@mail.de",
+        "options": {}
+      },
+      "id": "e677a9c7-71e0-49e0-8104-cf2576210192",
+      "name": "Vertrieb → E-Mail",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        -448,
+        -368
+      ],
+      "webhookId": "d8f3c49f-0bf5-411d-ae14-ac06422099b5",
+      "credentials": {
+        "smtp": {
+          "id": "gsddNnsWah1gDAHb",
+          "name": "SMTP account 30"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "DEINE_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "KI Manager Ausbildung Termine (5&6)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/DEINE_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1687585038,
+          "mode": "list",
+          "cachedResultName": "Tabellenblatt1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/DEINE_GOOGLE_SHEET_ID/edit#gid=1687585038"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Datum",
+              "displayName": "Datum",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Wochentag",
+              "displayName": "Wochentag",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Modul",
+              "displayName": "Modul",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tag",
+              "displayName": "Tag",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "ac5636f3-81d2-47e7-b927-4fa916d6a5dc",
+      "name": "Sonstiges → Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -448,
+        -192
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "qBuqCXx3bXGKbWWn",
+          "name": "Google Sheets Simone"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# 5 – Anfragen ans richtige Team\n\n**Mehr als zwei Wege:** Je nach Kategorie geht die Anfrage an einen anderen Kanal. Support → Slack, Vertrieb → E-Mail, alles andere → Google Sheets.\n\n**Lernziel:** Bei mehr als zwei Fällen nimmt man Switch statt vieler verschachtelter IFs.\n\nDenkmodell: **Auslöser (Wann?) → Entscheidung (Wie?) → Aktion (Was?)**",
+        "height": 284,
+        "width": 684,
+        "color": 6
+      },
+      "id": "1187025c-cb1f-49d9-9571-11e4f34c5613",
+      "name": "Übersicht",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1312,
+        -704
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Auslöser · Wann?\nEin anderes System schickt eine **Anfrage mit einem Feld 'kategorie'**.",
+        "height": 192,
+        "width": 256,
+        "color": 4
+      },
+      "id": "26993983-ce44-4a26-b403-18fcb19f9df5",
+      "name": "Note Webhook",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1152,
+        -144
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Entscheidung · Wie?\nDie **Post-Sortieranlage**: wählt je nach Wert (hier: kategorie) das passende Gleis. Ein Ausgang pro Fall.",
+        "height": 192,
+        "width": 276,
+        "color": 3
+      },
+      "id": "f0ed944a-5e8d-40e0-a48c-fae3e5b55ac2",
+      "name": "Note Switch",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -832,
+        -144
+      ]
+    },
+    {
+      "parameters": {
+        "content": "**Fall 'Support'** landet hier: postet die Anfrage in den **Slack-Kanal** des Support-Teams.",
+        "height": 130,
+        "width": 250,
+        "color": 5
+      },
+      "id": "5484463e-51f6-4140-bc39-4b52ad420907",
+      "name": "Note Slack",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        -544
+      ]
+    },
+    {
+      "parameters": {
+        "content": "**Fall 'Vertrieb'** landet hier: schickt die Anfrage per **E-Mail** ans Vertriebsteam.",
+        "height": 130,
+        "width": 250,
+        "color": 5
+      },
+      "id": "2fc8b857-a494-4956-8e1d-896a9234bcff",
+      "name": "Note Email",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        -368
+      ]
+    },
+    {
+      "parameters": {
+        "content": "**Alles andere ('Sonstiges')** landet hier: wird als neue Zeile in **Google Sheets** protokolliert.",
+        "height": 130,
+        "width": 250,
+        "color": 5
+      },
+      "id": "969df7d2-dfba-416d-81d0-9e3ab27ba1f3",
+      "name": "Note Sheets",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        -192
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Anfrage kommt rein": {
+      "main": [
+        [
+          {
+            "node": "Nach Kategorie sortieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nach Kategorie sortieren": {
+      "main": [
+        [
+          {
+            "node": "Support → Slack",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Vertrieb → E-Mail",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sonstiges → Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "041c1511-931f-43db-9297-cbc94d7819fe",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": [],
+  "id": "BvYaR2fERki4FPqL",
+  "tags": []
+}

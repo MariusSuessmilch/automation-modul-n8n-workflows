@@ -1,0 +1,71 @@
+{
+  "name": "Tag 2 · Übung: API-Response lesen",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n-0008",
+      "name": "Auf Knopfdruck starten",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://randomuser.me/api/",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "n-0009",
+      "name": "Zufälligen Nutzer holen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## API-Response lesen\n**Auf Knopfdruck starten → Zufälligen Nutzer holen**\n\nDie Option *Include Response Headers and Status* ist aktiv. Finde im Output `body`, `headers` und `statusCode`. Klapp dann `body` › `results[0]` auf – so siehst du, wie tief verschachtelt eine echte API-Antwort ist.",
+        "height": 220,
+        "width": 420,
+        "color": 4
+      },
+      "id": "sticky-0010",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        40
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Auf Knopfdruck starten": {
+      "main": [
+        [
+          {
+            "node": "Zufälligen Nutzer holen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

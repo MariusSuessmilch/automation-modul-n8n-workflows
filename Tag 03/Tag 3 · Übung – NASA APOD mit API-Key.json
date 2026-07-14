@@ -1,0 +1,75 @@
+{
+  "name": "Tag 3 · Übung: NASA APOD mit API-Key",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n-0011",
+      "name": "Auf Knopfdruck starten",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.nasa.gov/planetary/apod",
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "DEMO_KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0012",
+      "name": "Astronomie-Bild holen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## NASA APOD mit API-Key\nDer Key steckt als Query-Parameter `api_key` in der URL.\n\n`DEMO_KEY` ist der öffentliche Demo-Key – gedrosselt. Hol dir deinen eigenen kostenlosen Key auf **api.nasa.gov** und ersetze `DEMO_KEY`.\n\n*Sauberer geht es mit einer Query-Auth-Credential.* Fertig, wenn Status **200** kommt und im Output ein `title` steht.",
+        "height": 240,
+        "width": 420,
+        "color": 4
+      },
+      "id": "sticky-0013",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        40
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Auf Knopfdruck starten": {
+      "main": [
+        [
+          {
+            "node": "Astronomie-Bild holen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
