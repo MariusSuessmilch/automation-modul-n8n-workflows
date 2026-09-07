@@ -1,0 +1,80 @@
+{
+  "name": "Tag 2 · Webhook: Dein erster Empfänger",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "gruss",
+        "options": {},
+        "responseMode": "onReceived"
+      },
+      "id": "n-wh-01",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "webhookId": "b7f3c2a1-9e4d-4a8b-8c6f-1d2e3f4a5b6c"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "antwort",
+              "value": "=Hallo {{ $json.query.name }}, willkommen bei n8n!",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-wh-02",
+      "name": "Gruß bauen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Webhook · Dein erster Empfänger\nGET /gruss?name=Anna → Gruß bauen. `query.name` wird zum Feld `antwort`.\n\n**Test:** Im Webhook zuerst Listen for test event klicken. Danach die angezeigte Test-URL mit `?name=Anna` im Browser aufrufen. Prüfe `query.name` und anschließend `antwort` im Node-Output. Der Browser erhält nur die Empfangsbestätigung.\n\nFür jede Gruppe einen eigenen Path verwenden, z. B. `gruss-gruppe-1`. Vor jedem neuen Test erneut lauschen. Für diesen Test ist kein Publish nötig.",
+        "height": 360,
+        "width": 500,
+        "color": 4
+      },
+      "id": "sticky-wh-03",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -60
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Gruß bauen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

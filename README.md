@@ -16,7 +16,7 @@ Alternativ ohne Download: Dateiinhalt auf GitHub kopieren (Button **Copy raw fil
 | Ordner | Inhalt |
 | --- | --- |
 | Tag 01 | Mini-Übung: dein erster Workflow (Manual Trigger + Edit Fields) |
-| Tag 02 | Die 5 „Nodes in Aktion"-Demos, IF- und Split-Out-Extras, Tagesgruß-Mail, API-Response lesen |
+| [Tag 02](Tag%2002/README.md) | Die 5 „Nodes in Aktion“-Beispiele, aktuelle Logik-Demos (IF, Switch, Merge, Split Out), Webhook, HTTP, SMTP, Tagesgruß-Mail, JSON-Body und Nachmittagsübung |
 | Tag 03 | API-Keys-Demo (3 Varianten), Datenquellen (OpenWeather, RSS, Google Sheets), NASA-APOD-Übung |
 | Tag 04 | E-Mail-Klassifizierung mit KI (Basis + Ausbau mit Switch-Routing) |
 | Tag 05 | Zielbild der Claude-in-Chrome-Demo, Recherche-Agent (AI Agent Node + Tools) |
@@ -26,7 +26,7 @@ Alternativ ohne Download: Dateiinhalt auf GitHub kopieren (Button **Copy raw fil
 ## Hinweise
 
 - **Credentials:** Die Workflows referenzieren die Zugänge des Kurs-Servers (z. B. „KIMA OpenAi account", „SerpAPI"). In einer eigenen n8n-Instanz musst du nach dem Import eigene Credentials anlegen und in den betroffenen Nodes auswählen. Die Dateien enthalten **keine** API-Keys oder Passwörter.
-- **Send-Email-Nodes** sind bewusst ohne SMTP-Zugang gespeichert und zeigen nach dem Import ein Warndreieck, bis du einen einträgst.
+- **Send-Email-Nodes:** Wähle nach dem Import dein eigenes SMTP-Credential sowie einen erlaubten Absender und dein eigenes Testpostfach. Die aktuellen Tag-2-Mailübungen enthalten keine Credential-Referenz; ältere Beispiele können noch auf einen Kurs-Zugang verweisen.
 - Die NASA-Übung nutzt den öffentlichen `DEMO_KEY` von [api.nasa.gov](https://api.nasa.gov) — für mehr als ein paar Testaufrufe dort einen eigenen (kostenlosen) Key holen.
 - Die KI-Workflows (Tag 4–7) sind auf `gpt-5.4-mini` eingestellt; jedes andere Chat-Modell funktioniert genauso.
 - **Platzhalter:** `deine@mail.de` (Mail-Empfänger), `DEIN_OPENWEATHER_KEY` (API-Keys-Demo Tag 3) und `DEINE_GOOGLE_SHEET_ID` (Sheets-Workflows Tag 2) ersetzt du nach dem Import durch eigene Werte. Einen kostenlosen OpenWeather-Key gibt es auf [openweathermap.org](https://openweathermap.org/api).

@@ -1,0 +1,133 @@
+{
+  "name": "Tag 2 · Logic: Merge — Zwei Feeds, ein Strom",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 8,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "n-mg-01",
+      "name": "Jeden Morgen 08:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://the-decoder.de/feed/",
+        "options": {}
+      },
+      "id": "n-mg-02",
+      "name": "The Decoder",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://t3n.de/rss.xml",
+        "options": {}
+      },
+      "id": "n-mg-03",
+      "name": "t3n",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        240,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "append",
+        "numberInputs": 2,
+        "options": {}
+      },
+      "id": "n-mg-04",
+      "name": "Feeds zusammenführen",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Merge · Zwei Quellen, ein Strom\nSchedule Trigger → zwei RSS Read → Merge (Append). Jeden Tag um 08:00, Zeitzone Europe/Berlin. Zum Testen Execute workflow klicken; für die Übung nicht veröffentlichen.\n\nThe Decoder und t3n liefern je einen Datenstrom. Merge wartet auf beide Eingänge und hängt ihre Items aneinander. Doppelte Artikel bleiben erhalten.\n\n**Aufgabe:** Ersetze im t3n-Node die URL durch `https://the-decoder.com/feed/`. Prüfe: Anzahl am Merge-Ausgang = Anzahl an Input 1 + Anzahl an Input 2.",
+        "height": 360,
+        "width": 500,
+        "color": 4
+      },
+      "id": "sticky-mg-05",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -40
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Jeden Morgen 08:00": {
+      "main": [
+        [
+          {
+            "node": "The Decoder",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "t3n",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "The Decoder": {
+      "main": [
+        [
+          {
+            "node": "Feeds zusammenführen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "t3n": {
+      "main": [
+        [
+          {
+            "node": "Feeds zusammenführen",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Berlin"
+  },
+  "tags": []
+}

@@ -25,11 +25,11 @@
     },
     {
       "parameters": {
-        "fromEmail": "kurs@example.de",
-        "toEmail": "deine@mail.de",
+        "fromEmail": "absender@example.com",
+        "toEmail": "dein-testpostfach@example.com",
         "subject": "Guten Morgen!",
         "emailFormat": "text",
-        "text": "Hallo, es ist 8 Uhr – Zeit, produktiv zu starten!",
+        "text": "Hallo, diese Nachricht kommt aus unserem Kurs-Workflow.",
         "options": {}
       },
       "id": "n-0005",
@@ -43,8 +43,8 @@
     },
     {
       "parameters": {
-        "content": "## Auslöser · Wann?\nJeden Tag um **8:00 Uhr** startet der Workflow automatisch – ohne Knopfdruck.",
-        "height": 180,
+        "content": "## Auslöser · Wann?\nTäglich um 08:00, Zeitzone Europe/Berlin. Execute workflow startet sofort, unabhängig von der Uhrzeit. Die Übung bleibt unveröffentlicht.",
+        "height": 220,
         "width": 300,
         "color": 5
       },
@@ -53,15 +53,15 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        0,
-        40
+        -80,
+        20
       ]
     },
     {
       "parameters": {
-        "content": "## Aktion · Was?\nVerschickt eine feste Gruß-Mail.\n\n⚠️ Am Mail-Node erst eine **SMTP-Credential** eintragen (Warndreieck), dann den Workflow publishen/aktivieren.",
-        "height": 200,
-        "width": 340,
+        "content": "## Aktion · Was?\nWähle dein eingerichtetes SMTP-Credential. From: erlaubter SMTP-Absender. To: eigenes Testpostfach. Alle Mail-Felder bleiben Fixed.\n\nEmpfänger prüfen, Execute workflow klicken und Eingang/Spam kontrollieren. Screenshot und Empfang im Gruppenfeld dokumentieren. Kein Publish für die Abgabe nötig.",
+        "height": 260,
+        "width": 420,
         "color": 3
       },
       "id": "sticky-0007",
@@ -90,7 +90,8 @@
   },
   "active": false,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "timezone": "Europe/Berlin"
   },
   "tags": []
 }

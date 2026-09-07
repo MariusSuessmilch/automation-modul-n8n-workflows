@@ -1,0 +1,99 @@
+{
+  "name": "Tag 2 · Logic: Split Out — Aus eins mach viele",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n-so-01",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "themen",
+              "value": "={{ [\"Trigger\", \"Actions\", \"APIs\", \"Webhooks\", \"JSON\"] }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-so-02",
+      "name": "Themen-Liste",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "themen",
+        "options": {}
+      },
+      "id": "n-so-03",
+      "name": "Pro Thema ein Item",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Split Out · Aus eins mach viele\nDie Edit-Fields-Node setzt **ein** Feld `themen` mit einer Liste aus 5 Kurs-Themen. Split Out zerlegt die Liste und macht daraus **5 Items**, je ein Thema.\n\n**Aufgabe:** Ergänze zwei weitere Themen in der Liste (z. B. `Nodes`, `Expressions`) und führ den Workflow aus. Aus 5 Items werden 7.",
+        "height": 280,
+        "width": 440,
+        "color": 4
+      },
+      "id": "sticky-so-04",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -40
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Themen-Liste",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Themen-Liste": {
+      "main": [
+        [
+          {
+            "node": "Pro Thema ein Item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

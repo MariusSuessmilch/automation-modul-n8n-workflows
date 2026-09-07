@@ -1,0 +1,70 @@
+{
+  "name": "Tag 2 · Live-Demo: Send Email mit SMTP einrichten",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "972e8dee-6bcf-4b16-8bda-ee99d1d4fde3",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "fromEmail": "absender@example.com",
+        "toEmail": "dein-testpostfach@example.com",
+        "subject": "SMTP-Test",
+        "emailFormat": "text",
+        "text": "Hallo, diese Nachricht kommt aus unserem SMTP-Test.",
+        "options": {}
+      },
+      "id": "538e066b-6af9-4ad9-b6bd-5075dea9cc30",
+      "name": "SMTP-Test senden",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        340,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Live-Demo · Send Email mit SMTP\nManual Trigger → Send Email. Wähle nach dem Import dein SMTP-Credential (z. B. „SMTP Kurs-Test“). Ersetze From durch den erlaubten Absender und To durch dein eigenes Testpostfach. Alle Textfelder bleiben Fixed.\n\nHost, User, Password und Port liefert dein Anbieter bzw. die IT. Port 465: SSL/TLS an. Port 587: SSL/TLS aus, Disable STARTTLS aus. Ignore SSL Issues bleibt aus. Client Host Name nur nach Vorgabe ausfüllen.\n\nEmpfänger kontrollieren, Execute workflow klicken, Eingang und Spam prüfen. Ohne bestätigten Empfang ist der Versand nicht verifiziert. Kein Publish nötig. Zugangsdaten gehören ausschließlich in Credentials.",
+        "height": 420,
+        "width": 660,
+        "color": 4
+      },
+      "id": "0b4500f4-3c8c-4cfa-b493-aac3badf3055",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -160
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "SMTP-Test senden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

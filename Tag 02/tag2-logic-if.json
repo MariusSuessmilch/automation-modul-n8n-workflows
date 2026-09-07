@@ -1,0 +1,173 @@
+{
+  "name": "Tag 2 · Logic: IF — KI-Artikel oder nicht?",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n-if-01",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://the-decoder.de/feed/",
+        "options": {}
+      },
+      "id": "n-if-02",
+      "name": "KI-News lesen",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        220,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.title }}",
+              "rightValue": "KI",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "n-if-03",
+      "name": "Titel enthält \"KI\"?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        460,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "kategorie",
+              "value": "KI-Artikel",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-if-04",
+      "name": "KI-Artikel",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        700,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a2",
+              "name": "kategorie",
+              "value": "Anderes Thema",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-if-05",
+      "name": "Anderes Thema",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        700,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## IF · Wenn-Dann\nLiest die Artikel von The Decoder und verzweigt pro Item: Steht das Suchwort **KI** im Titel, geht das Item oben raus (**true**), sonst unten (**false**).\n\n**Aufgabe:** Ändere das Suchwort in der IF-Bedingung von `KI` auf `Agent` und führ den Workflow erneut aus. Schau, wie sich die Verteilung ändert.",
+        "height": 280,
+        "width": 420,
+        "color": 4
+      },
+      "id": "sticky-if-06",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "KI-News lesen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "KI-News lesen": {
+      "main": [
+        [
+          {
+            "node": "Titel enthält \"KI\"?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Titel enthält \"KI\"?": {
+      "main": [
+        [
+          {
+            "node": "KI-Artikel",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Anderes Thema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

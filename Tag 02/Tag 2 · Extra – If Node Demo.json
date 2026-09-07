@@ -70,7 +70,7 @@
             {
               "id": "1",
               "leftValue": "={{ $json.zahl }}",
-              "rightValue": "10",
+              "rightValue": 10,
               "operator": {
                 "type": "number",
                 "operation": "gt"
@@ -155,6 +155,24 @@
         [
           {
             "node": "Prüfung",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prüfung": {
+      "main": [
+        [
+          {
+            "node": "Große Zahl",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Kleine Zahl",
             "type": "main",
             "index": 0
           }

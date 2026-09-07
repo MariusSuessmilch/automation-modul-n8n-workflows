@@ -1,5 +1,5 @@
 {
-  "name": "Tag 2 · Übung: API-Response lesen",
+  "name": "Tag 2 · Übung: Den JSON-Body lesen",
   "nodes": [
     {
       "parameters": {},
@@ -15,13 +15,7 @@
     {
       "parameters": {
         "url": "https://randomuser.me/api/",
-        "options": {
-          "response": {
-            "response": {
-              "fullResponse": true
-            }
-          }
-        }
+        "options": {}
       },
       "id": "n-0009",
       "name": "Zufälligen Nutzer holen",
@@ -34,9 +28,9 @@
     },
     {
       "parameters": {
-        "content": "## API-Response lesen\n**Auf Knopfdruck starten → Zufälligen Nutzer holen**\n\nDie Option *Include Response Headers and Status* ist aktiv. Finde im Output `body`, `headers` und `statusCode`. Klapp dann `body` › `results[0]` auf – so siehst du, wie tief verschachtelt eine echte API-Antwort ist.",
-        "height": 220,
-        "width": 420,
+        "content": "## Übung · Den JSON-Body lesen\nManual Trigger → HTTP Request (GET https://randomuser.me/api/), Authentication: None. Zusätzliche Response-Optionen bleiben aus.\n\nFühre den Workflow aus und öffne die JSON-Ansicht. Finde: `results` (Array), `results[0]` (erste Person), `results[0].name` (Objekt), `results[0].email` (String), `results[0].dob.age` (Zahl), `info` (Objekt).\n\nNotiere den Stadtpfad `results[0].location.city` und seinen Wert. Index 0 bezeichnet das erste Element. Speichere sechs markierte Stellen und deine Erklärung im Gruppenfeld.\n\nOptional später: Include Response Headers and Status aktivieren. Dann liegt der JSON-Body unter `body`, z. B. `body.results[0]`.",
+        "height": 360,
+        "width": 500,
         "color": 4
       },
       "id": "sticky-0010",
@@ -45,7 +39,7 @@
       "typeVersion": 1,
       "position": [
         0,
-        40
+        -120
       ]
     }
   ],

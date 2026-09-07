@@ -1,0 +1,296 @@
+{
+  "name": "Tag 2 · Logic: Switch — Artikel nach Kategorie sortieren",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n-sw-01",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://the-decoder.de/feed/",
+        "options": {}
+      },
+      "id": "n-sw-02",
+      "name": "KI-News lesen",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        260,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "rules",
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r1",
+                    "leftValue": "={{ $json.categories }}",
+                    "rightValue": "Forschung",
+                    "operator": {
+                      "type": "array",
+                      "operation": "contains",
+                      "rightType": "any"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Forschung"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r2",
+                    "leftValue": "={{ $json.categories }}",
+                    "rightValue": "Short News",
+                    "operator": {
+                      "type": "array",
+                      "operation": "contains",
+                      "rightType": "any"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Short News"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "r3",
+                    "leftValue": "={{ $json.categories }}",
+                    "rightValue": "Praxis",
+                    "operator": {
+                      "type": "array",
+                      "operation": "contains",
+                      "rightType": "any"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Praxis"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "allMatchingOutputs": false
+        }
+      },
+      "id": "n-sw-03",
+      "name": "Nach Kategorie sortieren",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        520,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b1",
+              "name": "ordner",
+              "value": "Forschung",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-sw-04",
+      "name": "Ordner Forschung",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b2",
+              "name": "ordner",
+              "value": "Short News",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-sw-05",
+      "name": "Ordner Short News",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b3",
+              "name": "ordner",
+              "value": "Praxis",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-sw-06",
+      "name": "Ordner Praxis",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b4",
+              "name": "ordner",
+              "value": "Sonstiges",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-sw-07",
+      "name": "Ins Sammelfach",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Switch · Mehr als zwei Wege\nRules prüft das Array `categories` mit Array · contains auf Forschung, Short News und Praxis. Nur die erste passende Regel erhält das Item. Ohne Treffer geht es zum vierten Ausgang (Fallback).\n\nEdit Fields setzt nur `ordner`; es werden keine Ordner angelegt. Titel und Kategorien kannst du im Input prüfen.\n\n**Aufgabe:** Ergänze eine Regel für eine weitere Kategorie. Prüfe die Reihenfolge und verbinde den Fallback nach dem Hinzufügen erneut mit „Ins Sammelfach“. Ein Ausgang darf leer bleiben.",
+        "height": 360,
+        "width": 500,
+        "color": 4
+      },
+      "id": "sticky-sw-08",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -300
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "KI-News lesen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "KI-News lesen": {
+      "main": [
+        [
+          {
+            "node": "Nach Kategorie sortieren",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nach Kategorie sortieren": {
+      "main": [
+        [
+          {
+            "node": "Ordner Forschung",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ordner Short News",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ordner Praxis",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ins Sammelfach",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

@@ -1,0 +1,186 @@
+{
+  "name": "Tag 2 · Nachmittagsübung: RSS → IF → zwei Zweige",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 8,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "n-0001",
+      "name": "Jeden Morgen 08:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://the-decoder.de/feed/",
+        "options": {}
+      },
+      "id": "n-0002",
+      "name": "KI-News lesen",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.title }}",
+              "rightValue": "OpenAI",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "n-0003",
+      "name": "Steht OpenAI im Titel?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "meldung",
+              "value": "=OpenAI: {{ $json.title }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0004",
+      "name": "OpenAI-Meldung",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a2",
+              "name": "meldung",
+              "value": "=Sonstige KI-News: {{ $json.title }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-0005",
+      "name": "Sonstige Meldung",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Nachmittagsübung Tag 2\nTäglich 08:00 (Europe/Berlin) → The Decoder RSS → IF → zwei Edit-Fields-Zweige. Test mit Execute workflow; nicht veröffentlichen. Keine KI-Nodes oder Credentials nötig.\n\nIF: Titel als Expression, contains, `OpenAI` als Fixed. Jeder Zweig setzt `meldung`; andere Eingabefelder sind standardmäßig ausgeblendet. Prüfe Titel im IF-Input und notiere die Item-Zahlen. Ein Zweig darf leer bleiben.\n\n**Ausbau Merge:** Zweiten RSS Read direkt an den Trigger hängen: `https://the-decoder.com/feed/`. Beide Feeds vor IF per Merge → Append verbinden.\n\n**Ausbau Split Out:** Nach RSS Read das Array `categories` aufteilen; Include → All Other Fields wählen, damit `title` erhalten bleibt. Danach pro Kategorie und Titel prüfen.",
+        "height": 360,
+        "width": 500,
+        "color": 4
+      },
+      "id": "sticky-0006",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -60
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Jeden Morgen 08:00": {
+      "main": [
+        [
+          {
+            "node": "KI-News lesen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "KI-News lesen": {
+      "main": [
+        [
+          {
+            "node": "Steht OpenAI im Titel?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Steht OpenAI im Titel?": {
+      "main": [
+        [
+          {
+            "node": "OpenAI-Meldung",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sonstige Meldung",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Berlin"
+  },
+  "tags": []
+}

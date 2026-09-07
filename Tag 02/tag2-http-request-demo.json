@@ -1,0 +1,65 @@
+{
+  "name": "Tag 2 · Live-Demo: Die erste API abrufen",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n-http-01",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://randomuser.me/api/",
+        "options": {}
+      },
+      "id": "n-http-02",
+      "name": "Zufalls-Nutzer holen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## HTTP Request · Die erste API abrufen\nDie **HTTP Request**-Node ruft eine API auf. Hier läuft eine GET-Anfrage an `https://randomuser.me/api/`. Die API liefert einen zufälligen Nutzer als JSON zurück.\n\n**So läuft die Demo:** URL eintragen, Workflow ausführen. Im Output steht die JSON-Antwort. Klapp `results[0]` auf und schau, welche Felder zurückkommen (Name, E-Mail, Adresse).",
+        "height": 260,
+        "width": 440,
+        "color": 4
+      },
+      "id": "sticky-http-03",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Zufalls-Nutzer holen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
