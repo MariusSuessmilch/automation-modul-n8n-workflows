@@ -1,0 +1,126 @@
+{
+  "name": "Tag 2 · Logic: Aggregate – RSS-Artikel bündeln",
+  "nodes": [
+    {
+      "id": "aba2d229-4e95-4a80-b5e0-a91eafe5cdab",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {},
+      "notes": "Manuell starten. Das Beispiel benötigt keine Credentials."
+    },
+    {
+      "id": "227f7bcd-b3b2-46c3-ae51-994325aed007",
+      "name": "RSS lesen",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {
+        "url": "https://the-decoder.de/feed/",
+        "options": {}
+      },
+      "notes": "Jeder Artikel wird ein eigenes Item. Die Zahl hängt vom aktuellen Feed ab."
+    },
+    {
+      "id": "8f266f13-1efe-457c-9a54-ff035fac3cd3",
+      "name": "Artikel bündeln",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        520,
+        0
+      ],
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "artikel",
+        "include": "specifiedFields",
+        "fieldsToInclude": "title,link",
+        "options": {}
+      },
+      "notes": "Aggregate: All Item Data (Into a Single List). Aus allen eingehenden Items wird ein Item mit dem Array artikel. Pro Artikel bleiben title und link erhalten."
+    },
+    {
+      "id": "1d61227e-a3e4-4a14-8039-fba1d6a48c33",
+      "name": "Ein Mailtext",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        780,
+        0
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "anzahl",
+              "name": "anzahl",
+              "type": "number",
+              "value": "={{ $json.artikel.length }}"
+            },
+            {
+              "id": "betreff",
+              "name": "betreff",
+              "type": "string",
+              "value": "={{ \"RSS-Überblick: \" + $json.artikel.length + \" Artikel\" }}"
+            },
+            {
+              "id": "mailtext",
+              "name": "mailtext",
+              "type": "string",
+              "value": "={{ $json.artikel.map((a, i) => (i + 1) + \". \" + a.title + \"\\n\" + a.link).join(\"\\n\\n\") }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "notes": "Erzeugt einen gemeinsamen Text mit allen Titeln und Links. Es wird keine E-Mail versendet. Ein späterer Send-Email-Node könnte mailtext als Text nutzen. Ein LLM kann ebenfalls die gesamte Liste in einem Input erhalten; Kontextgrenzen beachten."
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "RSS lesen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS lesen": {
+      "main": [
+        [
+          {
+            "node": "Artikel bündeln",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Artikel bündeln": {
+      "main": [
+        [
+          {
+            "node": "Ein Mailtext",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {}
+}
