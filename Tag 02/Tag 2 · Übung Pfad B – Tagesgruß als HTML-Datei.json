@@ -1,0 +1,136 @@
+{
+  "name": "Tag 2 · Übung Pfad B: Tagesgruß als HTML-Datei",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 8,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "n-0001",
+      "name": "Jeden Morgen um 8",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Musterlösung Pfad B: baut einen Tagesgruß als HTML-Seite.\n// Deine eigene Version erzeugst du mit der Prompt-Vorlage vom Board.\nconst name = 'Kursteilnehmer:in';\nconst datum = new Date().toLocaleDateString('de-DE', {\n  weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',\n  timeZone: 'Europe/Berlin',\n});\nconst sprueche = [\n  'Kleine Schritte sind auch Schritte.',\n  'Automatisiere das Langweilige, damit Zeit für das Wichtige bleibt.',\n  'Heute ist ein guter Tag für einen neuen Workflow.',\n];\nconst spruch = sprueche[new Date().getDate() % sprueche.length];\n\nconst html = `<!DOCTYPE html>\n<html lang=\"de\">\n<head>\n<meta charset=\"utf-8\">\n<title>Guten Morgen!</title>\n<style>\n  body { margin: 0; min-height: 100vh; display: grid; place-items: center;\n         font-family: system-ui, sans-serif; background: #1d2a3a; color: #f4f1ea; }\n  .karte { max-width: 560px; padding: 48px; border-radius: 20px;\n           background: #26374b; box-shadow: 0 20px 60px rgba(0,0,0,.35); }\n  .datum { color: #f5a623; font-weight: 600; letter-spacing: .04em; }\n  h1 { margin: 12px 0 24px; font-size: 40px; }\n  blockquote { margin: 0; padding-left: 16px; border-left: 4px solid #f5a623;\n               font-size: 20px; font-style: italic; }\n</style>\n</head>\n<body>\n  <div class=\"karte\">\n    <div class=\"datum\">${datum}</div>\n    <h1>Guten Morgen, ${name}!</h1>\n    <blockquote>${spruch}</blockquote>\n  </div>\n</body>\n</html>`;\n\nreturn [{ json: { html } }];"
+      },
+      "id": "n-0002",
+      "name": "HTML erzeugen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "html",
+        "options": {
+          "fileName": "tagesgruss.html"
+        }
+      },
+      "id": "n-0003",
+      "name": "Als Datei speichern",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Auslöser · Wann?\nTäglich um 08:00, Zeitzone Europe/Berlin. Execute workflow startet sofort, unabhängig von der Uhrzeit. Die Übung bleibt unveröffentlicht.",
+        "height": 220,
+        "width": 300,
+        "color": 5
+      },
+      "id": "sticky-0004",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Code · Was steht drin?\nErsetze den Code durch deine Version aus dem KI-Chat (Prompt-Vorlage vom Board). Modus: Run Once for All Items. Die letzte Zeile muss lauten:\n`return [{ json: { html } }];`\nBei Fehlern: Meldung komplett in den KI-Chat kopieren.",
+        "height": 260,
+        "width": 300,
+        "color": 4
+      },
+      "id": "sticky-0005",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Datei · Wo ist sie?\nConvert to File macht aus dem Feld `html` die Datei tagesgruss.html. Nach Execute workflow diese Node öffnen, im Output **Download** klicken und die Datei im Browser öffnen. Screenshot ins Gruppenfeld.",
+        "height": 260,
+        "width": 300,
+        "color": 3
+      },
+      "id": "sticky-0006",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        560,
+        0
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Jeden Morgen um 8": {
+      "main": [
+        [
+          {
+            "node": "HTML erzeugen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML erzeugen": {
+      "main": [
+        [
+          {
+            "node": "Als Datei speichern",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Berlin"
+  },
+  "tags": []
+}

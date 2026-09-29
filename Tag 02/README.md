@@ -15,6 +15,7 @@ Die kurzen Dateinamen entsprechen den Importverweisen auf dem Board. Datei öffn
 | Live-Demo: Webhook in Aktion | [tag2-webhook-demo.json](tag2-webhook-demo.json) | GET `/gruss?name=Anna` → Edit Fields setzt `antwort` |
 | Live-Demo: Send Email mit SMTP einrichten | [tag2-smtp-demo.json](tag2-smtp-demo.json) | Manual Trigger → Send Email an dein Testpostfach |
 | Übung: E-Mail Workflow | [Tagesgruß-Mail](Tag%202%20%C2%B7%20%C3%9Cbung%20E-Mail-Workflow%20%E2%80%93%20Tagesgru%C3%9F-Mail%20%288%3A00%29.json) | Schedule 08:00 → Send Email mit festem Text |
+| Pfad B · Übung: Dein Tagesgruß als HTML-Seite | [Tagesgruß als HTML-Datei](Tag%202%20%C2%B7%20%C3%9Cbung%20Pfad%20B%20%E2%80%93%20Tagesgru%C3%9F%20als%20HTML-Datei.json) | Schedule 08:00 → Code (liefert `html`) → Convert to File `tagesgruss.html`; Alternative zur Mail, ohne SMTP |
 | Live-Demo: Die erste API abrufen | [tag2-http-request-demo.json](tag2-http-request-demo.json) | Manual Trigger → HTTP GET `https://randomuser.me/api/` |
 | Übung: Den JSON-Body lesen | [API-Response lesen](Tag%202%20%C2%B7%20%C3%9Cbung%20%E2%80%93%20API-Response%20lesen.json) | JSON mit `results[0]` und `info` untersuchen; zusätzliche Response-Optionen bleiben aus |
 | Nachmittagsübung Tag 2 | [tag2-nachmittagsuebung.json](tag2-nachmittagsuebung.json) | Schedule 08:00 → RSS → IF (Titel enthält OpenAI) → zwei Edit Fields mit `meldung` |
