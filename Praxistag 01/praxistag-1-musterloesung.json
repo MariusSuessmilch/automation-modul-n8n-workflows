@@ -1,0 +1,366 @@
+{
+  "name": "Praxistag 1 · Musterlösung – Anfragen mit n8n sortieren",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "4bb119b3-a0d6-4289-a6e0-b7db23702aed",
+      "name": "Manuell starten",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const anfragen = [\n  { id: 'A01', thema: 'Technik', text: 'Mein Login funktioniert nicht.' },\n  { id: 'A02', thema: 'Rechnung', text: 'Bitte eine Rechnungskopie.' },\n  { id: 'A03', thema: 'Technik', text: 'Der Export bricht ab.' },\n  { id: 'A04', thema: '', text: 'Bitte zurückrufen.' },\n  { id: 'A05', thema: 'Sonstiges', text: 'Habt ihr einen Newsletter?' },\n  { id: 'A01', thema: 'Technik', text: 'Mein Login funktioniert nicht.' }\n];\n\nreturn anfragen.map(anfrage => ({ json: anfrage }));"
+      },
+      "id": "6bf32366-602b-47f8-932d-d9285bbbcbb6",
+      "name": "Sechs Übungsanfragen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "removeDuplicateInputItems",
+        "compare": "selectedFields",
+        "fieldsToCompare": "id",
+        "options": {
+          "removeOtherFields": false
+        }
+      },
+      "id": "186899d5-fcbe-4e7a-b16c-d47ef078a6d5",
+      "name": "Doppelte IDs entfernen",
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        520,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "rules",
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "55d992b4-90c2-4d4d-8872-297a7ad647f0",
+                    "leftValue": "={{ $json.thema }}",
+                    "rightValue": "Technik",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Technik"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7c5869ca-b3bf-4455-9c91-dcd469d28d2b",
+                    "leftValue": "={{ $json.thema }}",
+                    "rightValue": "Rechnung",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Rechnung"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d4dd6510-9c45-4591-90a8-2b0a49145ed4",
+                    "leftValue": "={{ $json.thema }}",
+                    "rightValue": "Sonstiges",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Sonstiges"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "allMatchingOutputs": false
+        }
+      },
+      "id": "efab658b-c1fa-4836-87a5-3dbb54d334b5",
+      "name": "Nach Thema verteilen",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        780,
+        268
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3a8fd374-867e-4339-bd6f-2f791fe04ffd",
+              "name": "team",
+              "value": "Support",
+              "type": "string"
+            },
+            {
+              "id": "b77257e3-a36f-439b-be6f-4a4a09bbf3ec",
+              "name": "status",
+              "value": "zugeordnet",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "509b300c-f424-4216-a22f-7f7935cdcf3a",
+      "name": "Support",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1100,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "47ecf000-974c-4daa-a7c3-89b4886f062d",
+              "name": "team",
+              "value": "Buchhaltung",
+              "type": "string"
+            },
+            {
+              "id": "facd18a4-5b51-4896-a50a-b1f9853db7e4",
+              "name": "status",
+              "value": "zugeordnet",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "7de925d2-108a-4ead-8ceb-d42303206b20",
+      "name": "Buchhaltung",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1100,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fd30c6c7-d66c-4cc4-af1c-a15dcd168dfe",
+              "name": "team",
+              "value": "Service",
+              "type": "string"
+            },
+            {
+              "id": "006e976f-cc97-4dd6-84db-abda22f2f0e3",
+              "name": "status",
+              "value": "zugeordnet",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "eaba6937-a430-440b-a71c-d752adf6ac08",
+      "name": "Service",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1100,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7101e8a0-bf78-4108-a818-f5ea0ae9f6e5",
+              "name": "team",
+              "value": "offen",
+              "type": "string"
+            },
+            {
+              "id": "88a24678-8b51-485f-83eb-fc87cb835c13",
+              "name": "status",
+              "value": "prüfen",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "d5804f8b-8cab-46c0-89b0-cd31354474fc",
+      "name": "Zur Prüfung",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1100,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Praxistag 1 · Musterlösung\n**Anfragen mit n8n sortieren**\n\n1. **Execute workflow** klicken. Keine Credentials nötig.\n2. Code liefert sechs einzelne Items. Remove Duplicates behält je `id` den ersten Eintrag im aktuellen Lauf: sechs → fünf.\n3. Switch prüft `thema`. Ohne Treffer geht es über **Extra Output** zur Prüfung.\n4. Edit Fields ergänzt `team` und `status`; `id`, `thema` und `text` bleiben erhalten.\n\nEs werden nur Übungsdaten verarbeitet; kein Versand und keine externen Aufrufe.",
+        "height": 460,
+        "width": 730,
+        "color": 4
+      },
+      "id": "1ca3e6e8-168b-4e69-b129-a8f9f87c9cd9",
+      "name": "Anleitung",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -340
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Erwarteter Output\n**Support:** A01, A03 · **Buchhaltung:** A02\n**Service:** A05 · **Zur Prüfung:** A04\nA01 kommt nur einmal vor.\n\n## Tests wie auf der Folie\nIm Code jeweils **nur eine Änderung** vornehmen und den gesamten Workflow erneut ausführen:\n- A04: `thema: 'Technik'` → Support\n- A04: `thema: 'Vertrieb'` → Zur Prüfung\n- A03: `id: 'A06'` → A01 und A06 bleiben erhalten\n\nVor jedem Test die Ausgangsdaten wiederherstellen. Ein leerer Ausgang ist bei manchen Tests richtig.",
+        "height": 390,
+        "width": 600,
+        "color": 5
+      },
+      "id": "5eb27d60-0482-4038-a1bf-6e8db94ec23c",
+      "name": "Ergebnisse und Tests",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        760,
+        -390
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manuell starten": {
+      "main": [
+        [
+          {
+            "node": "Sechs Übungsanfragen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sechs Übungsanfragen": {
+      "main": [
+        [
+          {
+            "node": "Doppelte IDs entfernen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Doppelte IDs entfernen": {
+      "main": [
+        [
+          {
+            "node": "Nach Thema verteilen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nach Thema verteilen": {
+      "main": [
+        [
+          {
+            "node": "Support",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Buchhaltung",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Service",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Zur Prüfung",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

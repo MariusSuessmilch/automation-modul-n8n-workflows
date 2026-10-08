@@ -22,6 +22,7 @@ Alternativ ohne Download: Dateiinhalt auf GitHub kopieren (Button **Copy raw fil
 | Tag 05 | Zielbild der Claude-in-Chrome-Demo, Recherche-Agent (AI Agent Node + Tools) |
 | Tag 06 | Multi-Agent-Content-Team (19 Nodes, Korrektur-Schleife + Human-in-the-Loop), Feedback-Formular |
 | Tag 07 | Memory-Demos: Kurzzeit (Session) vs. Langzeit (persistente Data Table) |
+| [Praxistag 01](Praxistag%2001/README.md) | Musterlösung: sechs Anfragen, doppelte IDs entfernen, nach Thema verteilen und Ergebnisse prüfen |
 
 ## Hinweise
 
