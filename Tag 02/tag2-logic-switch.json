@@ -1,5 +1,5 @@
 {
-  "name": "Tag 2 · Logic: Switch — Artikel nach Kategorie sortieren",
+  "name": "Tag 2 · Logic: Switch — Artikel nach Thema sortieren",
   "nodes": [
     {
       "parameters": {},
@@ -34,7 +34,7 @@
             {
               "conditions": {
                 "options": {
-                  "caseSensitive": true,
+                  "caseSensitive": false,
                   "leftValue": "",
                   "typeValidation": "loose",
                   "version": 2
@@ -42,24 +42,23 @@
                 "conditions": [
                   {
                     "id": "r1",
-                    "leftValue": "={{ $json.categories }}",
-                    "rightValue": "Forschung",
+                    "leftValue": "={{ $json.title }}",
+                    "rightValue": "OpenAI",
                     "operator": {
-                      "type": "array",
-                      "operation": "contains",
-                      "rightType": "any"
+                      "type": "string",
+                      "operation": "contains"
                     }
                   }
                 ],
                 "combinator": "and"
               },
               "renameOutput": true,
-              "outputKey": "Forschung"
+              "outputKey": "OpenAI"
             },
             {
               "conditions": {
                 "options": {
-                  "caseSensitive": true,
+                  "caseSensitive": false,
                   "leftValue": "",
                   "typeValidation": "loose",
                   "version": 2
@@ -67,24 +66,23 @@
                 "conditions": [
                   {
                     "id": "r2",
-                    "leftValue": "={{ $json.categories }}",
-                    "rightValue": "Short News",
+                    "leftValue": "={{ $json.title }}",
+                    "rightValue": "Google",
                     "operator": {
-                      "type": "array",
-                      "operation": "contains",
-                      "rightType": "any"
+                      "type": "string",
+                      "operation": "contains"
                     }
                   }
                 ],
                 "combinator": "and"
               },
               "renameOutput": true,
-              "outputKey": "Short News"
+              "outputKey": "Google"
             },
             {
               "conditions": {
                 "options": {
-                  "caseSensitive": true,
+                  "caseSensitive": false,
                   "leftValue": "",
                   "typeValidation": "loose",
                   "version": 2
@@ -92,132 +90,41 @@
                 "conditions": [
                   {
                     "id": "r3",
-                    "leftValue": "={{ $json.categories }}",
-                    "rightValue": "Praxis",
+                    "leftValue": "={{ $json.title }}",
+                    "rightValue": "Anthropic",
                     "operator": {
-                      "type": "array",
-                      "operation": "contains",
-                      "rightType": "any"
+                      "type": "string",
+                      "operation": "contains"
                     }
                   }
                 ],
                 "combinator": "and"
               },
               "renameOutput": true,
-              "outputKey": "Praxis"
+              "outputKey": "Anthropic"
             }
           ]
         },
         "options": {
           "fallbackOutput": "extra",
+          "renameFallbackOutput": "Sonstiges",
+          "ignoreCase": true,
           "allMatchingOutputs": false
         }
       },
       "id": "n-sw-03",
-      "name": "Nach Kategorie sortieren",
+      "name": "Nach Thema sortieren",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
         520,
-        280
+        234
       ]
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "b1",
-              "name": "ordner",
-              "value": "Forschung",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "n-sw-04",
-      "name": "Ordner Forschung",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        880,
-        0
-      ]
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "b2",
-              "name": "ordner",
-              "value": "Short News",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "n-sw-05",
-      "name": "Ordner Short News",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        880,
-        180
-      ]
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "b3",
-              "name": "ordner",
-              "value": "Praxis",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "n-sw-06",
-      "name": "Ordner Praxis",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        880,
-        360
-      ]
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "b4",
-              "name": "ordner",
-              "value": "Sonstiges",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "n-sw-07",
-      "name": "Ins Sammelfach",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        880,
-        540
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Switch · Mehr als zwei Wege\nRules prüft das Array `categories` mit Array · contains auf Forschung, Short News und Praxis. Nur die erste passende Regel erhält das Item. Ohne Treffer geht es zum vierten Ausgang (Fallback).\n\nEdit Fields setzt nur `ordner`; es werden keine Ordner angelegt. Titel und Kategorien kannst du im Input prüfen.\n\n**Aufgabe:** Ergänze eine Regel für eine weitere Kategorie. Prüfe die Reihenfolge und verbinde den Fallback nach dem Hinzufügen erneut mit „Ins Sammelfach“. Ein Ausgang darf leer bleiben.",
-        "height": 360,
+        "content": "## Switch · Mehr als zwei Wege\nSwitch ist das IF für mehr als zwei Fälle. Die Regeln prüfen den Titel jedes Artikels auf **OpenAI**, **Google** und **Anthropic**. Jeder Artikel geht an die erste passende Regel, alle übrigen an den Ausgang **Sonstiges** (Fallback). Ein Ausgang darf leer bleiben.\n\n**Aufgabe:**\n1. Bau diesen Workflow mit den drei Nodes selbst nach.\n2. Trag in der RSS-Read-Node die URL eines Feeds ein, den du selbst aussuchst.\n3. Ersetze die drei Suchwörter in der Switch-Node durch Begriffe, die zu deinem Feed passen, bei Politik etwa Parteinamen. Führe den Workflow aus und prüfe, welche Titel an welchem Ausgang ankommen.",
+        "height": 300,
         "width": 500,
         "color": 4
       },
@@ -227,7 +134,7 @@
       "typeVersion": 1,
       "position": [
         0,
-        -300
+        -60
       ]
     }
   ],
@@ -248,39 +155,7 @@
       "main": [
         [
           {
-            "node": "Nach Kategorie sortieren",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Nach Kategorie sortieren": {
-      "main": [
-        [
-          {
-            "node": "Ordner Forschung",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Ordner Short News",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Ordner Praxis",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Ins Sammelfach",
+            "node": "Nach Thema sortieren",
             "type": "main",
             "index": 0
           }

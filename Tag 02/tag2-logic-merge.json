@@ -1,5 +1,5 @@
 {
-  "name": "Tag 2 · Logic: Merge — Zwei Feeds, ein Strom",
+  "name": "Tag 2 · Logic: Merge — Zwei Feeds, ein Strom (Aufgabe)",
   "nodes": [
     {
       "parameters": {
@@ -53,9 +53,11 @@
     },
     {
       "parameters": {
-        "mode": "append",
+        "mode": "chooseBranch",
         "numberInputs": 2,
-        "options": {}
+        "chooseBranchMode": "waitForAll",
+        "output": "specifiedInput",
+        "useDataOfInput": 1
       },
       "id": "n-mg-04",
       "name": "Feeds zusammenführen",
@@ -68,8 +70,8 @@
     },
     {
       "parameters": {
-        "content": "## Merge · Zwei Quellen, ein Strom\nSchedule Trigger → zwei RSS Read → Merge (Append). Jeden Tag um 08:00, Zeitzone Europe/Berlin. Zum Testen Execute workflow klicken; für die Übung nicht veröffentlichen.\n\nThe Decoder und t3n liefern je einen Datenstrom. Merge wartet auf beide Eingänge und hängt ihre Items aneinander. Doppelte Artikel bleiben erhalten.\n\n**Aufgabe:** Ersetze im t3n-Node die URL durch `https://the-decoder.com/feed/`. Prüfe: Anzahl am Merge-Ausgang = Anzahl an Input 1 + Anzahl an Input 2.",
-        "height": 360,
+        "content": "## Merge · Zwei Quellen, ein Strom\nDieser Workflow ist noch nicht fertig: Die beiden RSS-Read-Nodes hängen nicht an Merge.\n\n**Aufgabe:**\n1. Öffne die Merge-Node und prüfe den Modus. Er muss auf **Append** stehen.\n2. Verbinde The Decoder mit Input 1 und t3n mit Input 2.\n3. Klick auf **Execute workflow**. Am Merge-Ausgang stehen so viele Items wie an beiden Eingängen zusammen.\n\nZeitplan: jeden Tag um 08:00, Zeitzone Europe/Berlin. **Execute workflow** startet sofort; für die Übung nicht veröffentlichen.",
+        "height": 320,
         "width": 500,
         "color": 4
       },
@@ -79,7 +81,7 @@
       "typeVersion": 1,
       "position": [
         0,
-        -40
+        -160
       ]
     }
   ],
@@ -97,28 +99,6 @@
             "node": "t3n",
             "type": "main",
             "index": 0
-          }
-        ]
-      ]
-    },
-    "The Decoder": {
-      "main": [
-        [
-          {
-            "node": "Feeds zusammenführen",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "t3n": {
-      "main": [
-        [
-          {
-            "node": "Feeds zusammenführen",
-            "type": "main",
-            "index": 1
           }
         ]
       ]

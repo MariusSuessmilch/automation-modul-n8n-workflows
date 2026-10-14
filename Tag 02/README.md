@@ -8,9 +8,9 @@ Die kurzen Dateinamen entsprechen den Importverweisen auf dem Board. Datei öffn
 
 | Board-Inhalt | Importdatei | Ablauf |
 | --- | --- | --- |
-| IF: Wenn-Dann-Logik | [tag2-logic-if.json](tag2-logic-if.json) | Manual Trigger → The Decoder RSS → Titel enthält KI? → zwei Edit Fields mit `kategorie` |
-| Switch: Mehr als zwei Wege | [tag2-logic-switch.json](tag2-logic-switch.json) | RSS → Kategorien-Array prüfen → Forschung / Short News / Praxis / Fallback; setzt `ordner` |
-| Merge: Zwei Quellen, ein Strom | [tag2-logic-merge.json](tag2-logic-merge.json) | Schedule 08:00 → The Decoder + t3n → Merge (Append) |
+| IF: Wenn-Dann-Logik | [tag2-logic-if.json](tag2-logic-if.json) | Manual Trigger → The Decoder RSS → Titel enthält KI? (Ausgänge true und false) |
+| Switch: Mehr als zwei Wege | [tag2-logic-switch.json](tag2-logic-switch.json) | Manual Trigger → The Decoder RSS → Titel auf OpenAI / Google / Anthropic prüfen → vier Ausgänge, Fallback „Sonstiges“ |
+| Merge: Zwei Quellen, ein Strom | [tag2-logic-merge.json](tag2-logic-merge.json) (Aufgabe), [tag2-logic-merge-loesung.json](tag2-logic-merge-loesung.json) (Lösung) | Schedule 08:00 → The Decoder + t3n → Merge (Append); in der Aufgabe hängen die Feeds noch nicht an Merge |
 | Aggregate: Viele Items bündeln | [tag2-logic-aggregate.json](tag2-logic-aggregate.json) | Manual Trigger → The Decoder RSS → Aggregate → ein gemeinsamer Mailtext |
 | Live-Demo: Webhook in Aktion | [tag2-webhook-demo.json](tag2-webhook-demo.json) | GET `/gruss?name=Anna` → Edit Fields setzt `antwort` |
 | Live-Demo: Send Email mit SMTP einrichten | [tag2-smtp-demo.json](tag2-smtp-demo.json) | Manual Trigger → Send Email an dein Testpostfach |
@@ -24,10 +24,10 @@ Die HTTP-Demo war als „Nodes in Aktion 1“ funktional bereits vorhanden. Die 
 
 ## Testen und Aufgaben
 
-- **Logik und RSS:** Keine Credentials nötig. RSS und HTTP brauchen Internetzugang; Feed-Inhalte und Item-Zahlen ändern sich. Ein leerer IF- oder Switch-Ausgang kann korrekt sein. Prüfe die eingehenden Titel bzw. Kategorien. IF durchsucht den Titel ohne Beachtung der Groß-/Kleinschreibung; Switch prüft die Kategorien mit ihrer genauen Schreibweise.
-- **IF:** Suchwort von `KI` auf `Agent` ändern und die beiden Ausgänge vergleichen. Edit Fields setzt nur `kategorie`; die ursprünglichen Titel stehen im Input.
-- **Switch:** Nur die erste passende Regel erhält das Item. Ergänze eine Kategorie mit **Array → contains**, links `{{ $json.categories }}`. Nach dem Hinzufügen einer Regel den Fallback wieder mit „Ins Sammelfach“ verbinden. Edit Fields setzt nur `ordner` und legt keine echten Ordner an.
-- **Merge:** Im t3n-Node die URL durch `https://the-decoder.com/feed/` ersetzen. Output-Anzahl = Input 1 + Input 2. Append entfernt keine Duplikate.
+- **Logik und RSS:** Keine Credentials nötig. RSS und HTTP brauchen Internetzugang; Feed-Inhalte und Item-Zahlen ändern sich. Ein leerer IF- oder Switch-Ausgang kann korrekt sein. Prüfe die eingehenden Titel. IF und Switch durchsuchen den Titel ohne Beachtung der Groß-/Kleinschreibung (Option **Ignore Case**).
+- **IF:** Den Workflow mit seinen drei Nodes nachbauen, in RSS Read einen selbst gewählten Feed eintragen und das Suchwort in der IF-Node passend zum Feed setzen, bei Politik etwa `Bundestag`, bei Technik `Apple`. Danach die Titel an true und false prüfen. Die Datei dient zum Vergleich. Am 14.10.2026 im Kurs-n8n geprüfte Feeds: Tagesschau `https://www.tagesschau.de/index~rss2.xml`, heise online `https://www.heise.de/rss/heise-atom.xml`, Sportschau `https://www.sportschau.de/index~rss2.xml`.
+- **Switch:** Gleiches Vorgehen wie bei IF, mit drei Suchwörtern zum eigenen Feed. Jede Regel prüft `{{ $json.title }}` mit **String → contains**. Nur die erste passende Regel erhält das Item; ohne Treffer geht es an „Sonstiges“, dafür unter Options **Fallback Output → Extra Output** wählen.
+- **Merge:** `tag2-logic-merge.json` ist halbfertig: Die beiden RSS-Nodes hängen nicht an Merge, und Merge steht auf **Choose Branch**. Modus auf **Append** stellen, The Decoder mit Input 1 und t3n mit Input 2 verbinden, ausführen. Output-Anzahl = Input 1 + Input 2 (Test am 14.10.2026: 10 + 20 = 30). Append entfernt keine Duplikate. Lösung: `tag2-logic-merge-loesung.json`.
 - **Aggregate:** `All Item Data (Into a Single List)`, Ausgabefeld `artikel`, `Include → Specified Fields`, `Fields To Include → title,link`. RSS liefert viele Items; Aggregate liefert ein Item mit einer Liste. Die letzte Edit-Fields-Node erzeugt `anzahl`, `betreff` und `mailtext`. Prüfe: RSS-Item-Anzahl = Länge von `artikel` = `anzahl`; am Ende genau ein Item. Keine Credentials nötig, kein Mailversand und kein LLM-Aufruf. Für einen späteren Mail- oder LLM-Schritt muss der gesamte Text bzw. die Liste als Input verwendet werden. Bei LLMs das Kontextlimit beachten.
 - **Split Out (Zusatzmaterial):** Das bisherige Beispiel bleibt als `tag2-logic-split-out.json` verfügbar; die Board-Folie behandelt seit 20.09.2026 Aggregate.
 - **Webhook:** Einen eigenen Path pro Gruppe setzen (z. B. `gruss-gruppe-1`). Zuerst **Listen for test event**, dann die angezeigte Test-URL mit `?name=Anna` aufrufen. `antwort` im Node-Output prüfen; der Browser zeigt die Empfangsbestätigung. Vor einem weiteren Test erneut lauschen.
