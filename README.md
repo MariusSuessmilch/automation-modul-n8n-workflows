@@ -17,7 +17,7 @@ Alternativ ohne Download: Dateiinhalt auf GitHub kopieren (Button **Copy raw fil
 | --- | --- |
 | Tag 01 | Mini-Übung: dein erster Workflow (Manual Trigger + Edit Fields) |
 | [Tag 02](Tag%2002/README.md) | Die 5 „Nodes in Aktion“-Beispiele, aktuelle Logik-Demos (IF, Switch, Merge, Aggregate; Split Out als Zusatzmaterial), Webhook, HTTP, SMTP, Tagesgruß-Mail, JSON-Body und Nachmittagsübung |
-| Tag 03 | API-Keys-Demo (3 Varianten), Datenquellen (OpenWeather, RSS, Google Sheets), NASA-APOD-Übung |
+| Tag 03 | API-Keys-Demo (3 Varianten), Datenquellen (OpenWeather, RSS, Google Sheets), NASA-APOD-Übung, Extra: Wetterbericht als HTML-Seite (Open-Meteo, ohne Key) |
 | Tag 04 | E-Mail-Klassifizierung mit KI (Basis + Ausbau mit Switch-Routing) |
 | Tag 05 | Zielbild der Claude-in-Chrome-Demo, Recherche-Agent (AI Agent Node + Tools) |
 | Tag 06 | Multi-Agent-Content-Team (19 Nodes, Korrektur-Schleife + Human-in-the-Loop), Feedback-Formular |
