@@ -24,6 +24,7 @@ Alternativ ohne Download: Dateiinhalt auf GitHub kopieren (Button **Copy raw fil
 | Tag 07 | Memory-Demos: Kurzzeit (Session) vs. Langzeit (persistente Data Table) |
 | [Praxistag 01](Praxistag%2001/README.md) | Musterlösung: sechs Anfragen, doppelte IDs entfernen, nach Thema verteilen und Ergebnisse prüfen |
 | [Praxistag 02](Praxistag%2002/README.md) | Musterlösung: Reisekosten-Agent im Chat, holt Wechselkurse per HTTP Request (URL vom Modell) und rechnet mit dem Calculator |
+| [Praxistag 03](Praxistag%2003/README.md) | Musterlösung: Ein Agent schreibt Kundenantworten, ein zweiter prüft sie gegen ein Faktenblatt (Structured Output Parser), IF verteilt auf versandbereit oder Mensch prüft |
 
 ## Hinweise
 

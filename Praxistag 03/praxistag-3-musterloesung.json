@@ -1,0 +1,378 @@
+{
+  "name": "Praxistag 3 · Musterlösung – Kundenantworten mit einem KI-Prüfer freigeben",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "fbff9933-d4dc-4b98-9ed6-c067f371ce60",
+      "name": "When clicking ‘Execute workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f3811477-efbf-4d5a-9836-96b3b3caefba",
+              "name": "faktenblatt",
+              "value": "Workshop: KI im Büroalltag (eintägig)\nTermine: 12. November und 3. Dezember, jeweils 9 bis 16 Uhr\nOrt: online über Zoom\nPreis: 390 Euro pro Person zuzüglich MwSt.\nGruppengröße: höchstens 12 Personen\nStorno: bis 14 Tage vor dem Termin kostenlos, danach 50 % des Preises\nTeilnahmebescheinigung: ja, als PDF nach dem Workshop\nAnmeldung: per E-Mail an anmeldung@workshop.example",
+              "type": "string"
+            },
+            {
+              "id": "21eb828c-6cb8-4a4f-9cb9-fe69184c7032",
+              "name": "anfrage",
+              "value": "Guten Tag, was kostet der Workshop und wann finden die Termine statt?",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2a8fca9d-d681-498a-a109-a71270ad6598",
+      "name": "Anfrage und Faktenblatt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -500,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Faktenblatt:\n{{ $json.faktenblatt }}\n\nAnfrage:\n{{ $json.anfrage }}",
+        "options": {
+          "systemMessage": "Du beantwortest Anfragen zum Workshop „KI im Büroalltag“. Antworte auf Deutsch in der Sie-Form, höchstens 120 Wörter.\nNutze nur Angaben aus dem Faktenblatt. Steht etwas nicht darin, schreib, dass wir es klären und uns melden.\nGeht es um eine Frist, nenne zuerst die Regel aus dem Faktenblatt und dann, was sie für den genannten Tag bedeutet. Rechne kein eigenes Datum aus.\nUnterschreibe mit „Ihr Workshop-Team“."
+        }
+      },
+      "id": "c859828b-d62c-4f41-bab9-7dbaaa515282",
+      "name": "Schreiber",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-6-luna",
+          "mode": "list",
+          "cachedResultName": "gpt-6-luna"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -260,
+        220
+      ],
+      "id": "05b25d2a-3e96-4cf0-85a6-f70d282e7003",
+      "name": "Modell Schreiber",
+      "credentials": {
+        "openAiApi": {
+          "id": "2vHahgmuEqMfi9WF",
+          "name": "OpenAI Kurs Credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Faktenblatt:\n{{ $('Anfrage und Faktenblatt').item.json.faktenblatt }}\n\nAnfrage:\n{{ $('Anfrage und Faktenblatt').item.json.anfrage }}\n\nEntwurf:\n{{ $json.output }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Du prüfst einen Antwortentwurf, bevor er an eine Kundin oder einen Kunden geht.\nRegel 1: Jeder Preis, jedes Datum und jede Frist im Entwurf stimmt mit dem Faktenblatt überein.\nRegel 2: Der Entwurf sagt nichts zu, was nicht im Faktenblatt steht, zum Beispiel einen Rabatt. Erlaubt ist der Hinweis, dass wir eine offene Frage klären und uns melden.\nRegel 3: Der Entwurf beantwortet die Frage aus der Anfrage und widerspricht sich nicht.\nbestanden ist nur true, wenn alle drei Regeln erfüllt sind. grund nennt die verletzte Regel und die Stelle im Entwurf. Ist alles erfüllt, schreib in grund: Alle Regeln erfüllt."
+        }
+      },
+      "id": "1c6b409f-4cc8-4553-88ac-783087573e81",
+      "name": "Prüfer",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        120,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-6-luna",
+          "mode": "list",
+          "cachedResultName": "gpt-6-luna"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        60,
+        220
+      ],
+      "id": "55142aa5-1f60-4936-99b1-ea8da578b31c",
+      "name": "Modell Prüfer",
+      "credentials": {
+        "openAiApi": {
+          "id": "2vHahgmuEqMfi9WF",
+          "name": "OpenAI Kurs Credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"bestanden\": false,\n  \"grund\": \"Regel 1: Der Entwurf nennt 290 Euro, im Faktenblatt stehen 390 Euro.\"\n}"
+      },
+      "id": "0a73f38a-b69d-41bb-b541-5c4444587a9c",
+      "name": "Structured Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        260,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1a722fbc-0c76-4f41-9681-361009105989",
+              "leftValue": "={{ $json.output.bestanden }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "94aee205-b386-4978-9a8f-a79224c3f58c",
+      "name": "Bestanden?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "15f54359-5aeb-4408-bf41-65a8ffe7624b",
+              "name": "status",
+              "value": "versandbereit",
+              "type": "string"
+            },
+            {
+              "id": "6f905c0b-d044-4204-9297-e632e26111ed",
+              "name": "antwort",
+              "value": "={{ $('Schreiber').item.json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "71b19208-8259-4652-ac07-d74da42794af",
+      "name": "Versandbereit",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        -120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d6edd0a7-023f-4082-b6d8-24a4aa7b2235",
+              "name": "status",
+              "value": "Mensch prüft",
+              "type": "string"
+            },
+            {
+              "id": "125f5802-e761-48c6-b949-74f6236b35d7",
+              "name": "grund",
+              "value": "={{ $json.output.grund }}",
+              "type": "string"
+            },
+            {
+              "id": "1c961f75-d03c-4348-9534-452dcba340b1",
+              "name": "antwort",
+              "value": "={{ $('Schreiber').item.json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4eab03fc-7fef-4c50-800a-99ff95a40601",
+      "name": "Mensch prüft",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Anleitung\n1. Bei beiden Modellen das Kurs-Credential wählen, falls n8n es nicht selbst zuordnet. **Use Responses API** bleibt an.\n2. In **Anfrage und Faktenblatt** die Anfrage eintragen.\n3. **Execute workflow** klicken und am Ende ablesen, welcher Ausgang Daten hat.\n\nDer Schreiber entwirft die Antwort, der Prüfer prüft sie gegen das Faktenblatt. Nur bei bestanden ist die Antwort versandbereit, sonst prüft ein Mensch.",
+        "height": 300,
+        "width": 420,
+        "color": 4
+      },
+      "id": "169456e3-1171-4ed9-acbb-de16cf7a1002",
+      "name": "Anleitung",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -760,
+        -360
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Testanfragen\n1. Was kostet der Workshop und wann sind die Termine? → versandbereit\n2. Ich bin für den 12. November angemeldet. Kann ich am 5. November noch kostenlos stornieren? → versandbereit, Antwort nennt 50 %. Widerspricht sich der Entwurf, ist Mensch prüft richtig.\n3. Gibt es einen Rabatt für Studierende? → versandbereit, kein Rabatt versprochen\n4. Output des Schreibers bearbeiten: 390 durch 290 ersetzen → Mensch prüft, Grund nennt den Preis\n5. Output des Schreibers bearbeiten: Satz mit 10 % Rabatt ergänzen → Mensch prüft\n\nDen Stift „Edit Output“ gibt es erst nach dem ersten Lauf. Save pinnt den Output, nach Test 4 und 5 mit Unpin wieder lösen.",
+        "height": 340,
+        "width": 520,
+        "color": 5
+      },
+      "id": "598b919d-6e46-430a-8566-5c1e7c358ad7",
+      "name": "Testanfragen",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        -400
+      ]
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Anfrage und Faktenblatt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anfrage und Faktenblatt": {
+      "main": [
+        [
+          {
+            "node": "Schreiber",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schreiber": {
+      "main": [
+        [
+          {
+            "node": "Prüfer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modell Schreiber": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Schreiber",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modell Prüfer": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Prüfer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Prüfer",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prüfer": {
+      "main": [
+        [
+          {
+            "node": "Bestanden?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bestanden?": {
+      "main": [
+        [
+          {
+            "node": "Versandbereit",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mensch prüft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
