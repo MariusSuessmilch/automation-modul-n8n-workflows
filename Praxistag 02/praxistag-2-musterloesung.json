@@ -1,0 +1,169 @@
+{
+  "name": "Praxistag 2 · Musterlösung – Reisekosten mit einem KI-Agenten umrechnen",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "28640d32-a1d4-41ab-9c38-f171ec374b20",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -512,
+        -384
+      ],
+      "webhookId": "ea545a05-9607-4bf2-8963-8ea6e0c17526"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Du hilfst bei Reisekosten. Antworte kurz und auf Deutsch.\nNutze HTTP Request für aktuelle Wechselkurse. Die Adresse lautet https://api.frankfurter.dev/v2/rate/GBP/EUR. Setze vorn die Währung des Betrags ein und hinten die Zielwährung.\nNutze Calculator für jede Rechnung, auch für Prozente und Summen.\nNenne bei jeder Umrechnung den Kurs und sein Datum. Runde Euro-Beträge auf zwei Nachkommastellen.\nDu buchst und bestellst nichts. Sag in diesem Fall, dass du das nicht kannst."
+        }
+      },
+      "id": "009f13a8-3a44-4da4-aa91-17c95ce4f6ed",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -240,
+        -384
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-6-luna",
+          "mode": "list",
+          "cachedResultName": "gpt-6-luna"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -368,
+        -144
+      ],
+      "id": "c58fe47c-778d-4788-a905-a72d5303adde",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "2vHahgmuEqMfi9WF",
+          "name": "OpenAI Kurs Credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "options": {}
+      },
+      "id": "11d822ae-d61e-45e8-a438-5b2fec752384",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -128,
+        -144
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "71bcdddb-afad-4142-826c-52b1d0e91fef",
+      "name": "Calculator",
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        64,
+        -144
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Praxistag 2 · Musterlösung\n**Reisekosten mit einem KI-Agenten umrechnen**\n\n1. Unten **Open chat** öffnen.\n2. Testfragen aus dem Board stellen.\n3. In den **Logs** prüfen, welche Tools gelaufen sind.\n\nHTTP Request: URL vom Modell, GET, keine Authentifizierung. Kurse: api.frankfurter.dev, ohne API-Schlüssel.\n\nOpenAI Chat Model: **Use Responses API** bleibt an. Ohne sie lehnt gpt-6-luna Tools ab.",
+        "height": 300,
+        "width": 420,
+        "color": 4
+      },
+      "id": "d32bf059-2bd9-480f-a838-aac112724563",
+      "name": "Anleitung",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1000,
+        -460
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Testfragen und Erwartung\n- Wie viel Euro ist ein Pfund heute wert? → HTTP Request, oft danach Calculator zum Runden\n- Was sind 19 % von 240 Euro? → nur Calculator, 45,60 Euro\n- Wie viel Euro sind 186,40 GBP? → HTTP Request, dann Calculator\n- Wie viel Euro sind 42,50 USD plus 38,90 CHF? → zwei Kurse, dann Calculator\n- Buche mir ein Hotel in London. → kein Tool, Agent lehnt ab",
+        "height": 300,
+        "width": 420,
+        "color": 7
+      },
+      "id": "d417d69b-fea9-4de2-a5e9-0b1273e23aa3",
+      "name": "Testfragen",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1000,
+        -120
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
