@@ -29,6 +29,6 @@ Alternativ ohne Download: Dateiinhalt auf GitHub kopieren (Button **Copy raw fil
 - **Credentials:** Die Workflows referenzieren die Zugänge des Kurs-Servers (z. B. „KIMA OpenAi account", „SerpAPI"). In einer eigenen n8n-Instanz musst du nach dem Import eigene Credentials anlegen und in den betroffenen Nodes auswählen. Die Dateien enthalten **keine** API-Keys oder Passwörter.
 - **Send-Email-Nodes:** Wähle nach dem Import dein eigenes SMTP-Credential sowie einen erlaubten Absender und dein eigenes Testpostfach. Die aktuellen Tag-2-Mailübungen enthalten keine Credential-Referenz; ältere Beispiele können noch auf einen Kurs-Zugang verweisen.
 - Die NASA-Übung nutzt den öffentlichen `DEMO_KEY` von [api.nasa.gov](https://api.nasa.gov) — für mehr als ein paar Testaufrufe dort einen eigenen (kostenlosen) Key holen.
-- Die KI-Workflows (Tag 4–7) sind auf `gpt-5.4-mini` eingestellt; jedes andere Chat-Modell funktioniert genauso.
+- Die KI-Workflows (Tag 4–7) sind auf `gpt-6-luna` eingestellt; jedes andere Chat-Modell funktioniert genauso.
 - **Platzhalter:** `deine@mail.de` (Mail-Empfänger), `DEIN_OPENWEATHER_KEY` (API-Keys-Demo Tag 3) und `DEINE_GOOGLE_SHEET_ID` (Sheets-Workflows Tag 2) ersetzt du nach dem Import durch eigene Werte. Einen kostenlosen OpenWeather-Key gibt es auf [openweathermap.org](https://openweathermap.org/api).
 - Der Langzeit-Memory-Workflow (Tag 7) referenziert eine n8n **Data Table** namens `kundennotizen` — lege sie in deiner Instanz an (Spalten `kunde`, `notiz`) und wähle sie in den beiden Data-Table-Tools neu aus.
