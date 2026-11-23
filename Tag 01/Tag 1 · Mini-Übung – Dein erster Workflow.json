@@ -25,7 +25,7 @@
             {
               "id": "a2",
               "name": "datum",
-              "value": "={{ $now }}",
+              "value": "={{ $now.toISO() }}",
               "type": "string"
             }
           ]
@@ -43,7 +43,7 @@
     },
     {
       "parameters": {
-        "content": "## Mini-Übung Tag 1\n**Auf Knopfdruck starten → Gruß setzen**\n\nKlick auf *Test workflow*. Fertig, sobald im Output-Panel das Feld `gruss` mit \"Hallo n8n\" auftaucht.",
+        "content": "## Mini-Übung Tag 1\n**Auf Knopfdruck starten → Gruß setzen**\n\nKlick auf *Execute workflow*. Fertig, sobald im Output-Panel das Feld `gruss` mit \"Hallo n8n\" auftaucht.",
         "height": 200,
         "width": 360,
         "color": 4
